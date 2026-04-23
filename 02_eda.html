@@ -136,8 +136,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/Uninorte-logo.jpg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/Uninorte-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">Proyecto Integrador ML</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -158,6 +164,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_modelo_sklearn.html"><strong>Modelado Con scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_modelo_pyspark.html"><strong>Modelado con PySpark</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="10_lime_interpretabilidad.html"><strong>Interpretabilidad con LIME</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
 </ul>
@@ -312,7 +320,8 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estadisticas-descriptivas"><strong>Estadísticas descriptivas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-del-rango-intercuartilico-iqr"><strong>Análisis del rango intercuartílico (IQR)</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deteccion-de-valores-atipicos"><strong>Detección de valores atípicos</strong></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-del-analisis">Conclusión del análisis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-del-analisis"><strong>Conclusión del análisis</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#histogramas"><strong>Histogramas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#diagramas-de-caja-de-variables-numericas"><strong>Diagramas de caja de variables numéricas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-de-normalidad-de-las-variables-numericas"><strong>Evaluación de normalidad de las variables numéricas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-asimetria-de-las-variables-numericas"><strong>Interpretación de la asimetría de las variables numéricas</strong></a></li>
@@ -333,7 +342,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="analisis-exploratorio-de-datos-eda-numericas">
 <h1><strong>Análisis Exploratorio de Datos (EDA) - Numéricas</strong><a class="headerlink" href="#analisis-exploratorio-de-datos-eda-numericas" title="Permalink to this heading">#</a></h1>
-<p>En esta sección se realiza un análisis exploratorio detallado del dataset de Lending Club. El objetivo es comprender la estructura de los datos, identificar patrones relevantes y detectar problemas que puedan afectar el modelado, como valores faltantes, outliers o desbalance de clases.</p>
+<p>En esta sección se realiza un análisis exploratorio detallado del dataset de Lending Club para las variables numéricas. El objetivo es comprender la estructura de los datos, identificar patrones relevantes y detectar problemas que puedan afectar el modelado, como valores faltantes, outliers o desbalance de clases.</p>
 <p>Iniciamos cargando el dataset y generando nuestra variable default como se observó en la sección anterior:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -584,7 +593,7 @@ Categóricas: 38
 </div>
 </div>
 <p>Se identificaron un total de <strong>114 variables numéricas</strong> y <strong>38 variables categóricas</strong> en el dataset.</p>
-<p>Esta distribución refleja una predominancia de variables numéricas, muchas de ellas relacionadas con información financiera y crediticia.</p>
+<p>Esta distribución refleja una predominancia de variables numéricas, como el ingreso anual, el valor del préstamo, etc.</p>
 <section id="variables-numericas">
 <h3><strong>Variables Númericas</strong><a class="headerlink" href="#variables-numericas" title="Permalink to this heading">#</a></h3>
 <p>Dado el elevado número de variables, el análisis exploratorio se realizará de manera estructurada. En primer lugar, se evaluará la proporción de valores faltantes en cada variable numérica, con el fin de identificar posibles problemas de calidad de datos y definir un criterio para su tratamiento.</p>
@@ -681,10 +690,8 @@ Categóricas: 38
 </table>
 </div></div></div>
 </div>
-<p>Se observa que algunas variables presentan un 100% de valores faltantes, como es el caso de <code class="docutils literal notranslate"><span class="pre">member_id</span></code>. Esto indica que, aunque la columna existe en el dataset, no contiene información útil para el análisis.</p>
-<p>Adicionalmente, se identifican múltiples variables con más del 95% de valores faltantes, especialmente aquellas relacionadas con hardship, settlement y second application.</p>
-<p>Este comportamiento sugiere que dichas variables tienen una baja cobertura en el dataset y podrían no ser útiles para el modelado, lo cual será considerado en etapas posteriores de preprocesamiento.</p>
-<p>Con base en el análisis de valores faltantes, se considerará la aplicación de un umbral para la eliminación de variables con alta proporción de datos ausentes.</p>
+<p>Se identifican múltiples variables con más del 95% de valores faltantes, especialmente aquellas relacionadas con hardship, settlement y second application.</p>
+<p>Este comportamiento es debido a que son variables más circunstanciales y no aplican para todos los préstamos, por lo tanto, tienen una baja cobertura en el dataset y no son útiles para el modelado. Con base en el análisis de valores faltantes, se considerará la aplicación de un umbral para la eliminación de variables con alta proporción de datos ausentes.</p>
 <p>Como criterio preliminar, se evaluará un umbral del 30% de valores faltantes, bajo el cual las variables podrían ser eliminadas en la etapa de preprocesamiento, ya que su bajo nivel de información disponible limita su utilidad para el modelado.</p>
 <p>Así queda la distribución de columnas tras el umbral:</p>
 <div class="cell docutils container">
@@ -729,9 +736,8 @@ Categóricas: 38
 </div>
 </div>
 <p>Con base en el umbral del 30% de valores faltantes, se identificaron <strong>70 variables numéricas</strong> que cumplen con este criterio de calidad de datos.</p>
-<p>Esto implica que aproximadamente el 61% de las variables numéricas presentan un nivel de completitud adecuado para su análisis, mientras que el resto presenta proporciones elevadas de valores faltantes. Estas 70 variables constituyen el conjunto base a partir del cual se realizará la selección de variables relevantes para el análisis exploratorio detallado.</p>
-<p>Tras la revisión de las 70 variables, se realizó una selección adicional basada en la relevancia para el problema de predicción de default.</p>
-<p>Se excluyeron variables que representan información posterior al otorgamiento del préstamo (data leakage), así como variables con baja interpretabilidad o redundancia.</p>
+<p>Esto implica que aproximadamente el 61% de las variables numéricas presentan cumplen con una cantidad de datos adecuada para su análisis, mientras que el resto presenta proporciones elevadas de valores faltantes. Estas 70 variables constituyen el conjunto base a partir del cual se realizará la selección de variables relevantes para el análisis exploratorio detallado.</p>
+<p>Tras la revisión de las 70 variables, se realizó una selección adicional basada en la relevancia para el problema de predicción de default, por lo que, se excluyeron variables que representan información posterior al otorgamiento del préstamo (data leakage), así como variables con baja interpretabilidad o redundancia.</p>
 <p>El conjunto final que se presenta a continuación incluye variables relacionadas con el monto del préstamo, capacidad de pago del cliente, nivel de endeudamiento y perfil crediticio, las cuales son consideradas fundamentales en modelos de riesgo crediticio.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -750,7 +756,7 @@ Categóricas: 38
 </div>
 </div>
 </div>
-<p>Con estas variables se procede a calcular las estadísticas de cada una:</p>
+<p>Con estas variables se procede a realizar el análisis estadístico:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">num_vars</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
@@ -1075,7 +1081,7 @@ Categóricas: 38
 </section>
 <section id="analisis-unidimensional-de-variables-numericas-seleccionadas">
 <h3><strong>Análisis unidimensional de variables numéricas seleccionadas</strong><a class="headerlink" href="#analisis-unidimensional-de-variables-numericas-seleccionadas" title="Permalink to this heading">#</a></h3>
-<p>Se realizó el análisis unidimensional sobre un conjunto de 8 variables numéricas seleccionadas, considerando criterios de calidad de datos y relevancia para el problema de predicción de default.</p>
+<p>Se realizó el análisis unidimensional sobre el conjunto de 8 variables numéricas seleccionadas, considerando criterios de calidad de datos y relevancia para el problema de predicción de default.</p>
 <section id="estadisticas-descriptivas">
 <h4><strong>Estadísticas descriptivas</strong><a class="headerlink" href="#estadisticas-descriptivas" title="Permalink to this heading">#</a></h4>
 <p>Las estadísticas descriptivas evidencian que las variables relacionadas con el monto del préstamo (<code class="docutils literal notranslate"><span class="pre">loan_amnt</span></code>) presentan una media cercana a 15,000, con un rango entre 500 y 40,000, lo que refleja la variabilidad en los montos otorgados.</p>
@@ -1086,7 +1092,7 @@ Categóricas: 38
 <section id="analisis-del-rango-intercuartilico-iqr">
 <h4><strong>Análisis del rango intercuartílico (IQR)</strong><a class="headerlink" href="#analisis-del-rango-intercuartilico-iqr" title="Permalink to this heading">#</a></h4>
 <p>El análisis del IQR muestra que variables como <code class="docutils literal notranslate"><span class="pre">annual_inc</span></code> y <code class="docutils literal notranslate"><span class="pre">loan_amnt</span></code> presentan una alta dispersión, reflejando la heterogeneidad de los perfiles financieros.</p>
-<p>Variables como <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> presentan una dispersión moderada, lo cual es consistente con la naturaleza de los puntajes crediticios, que suelen estar acotados en rangos específicos.</p>
+<p>Variables como <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> presentan una dispersión moderada, lo cual es consistente con la naturaleza de los puntajes crediticios, que suelen mantenerse en rangos específicos.</p>
 </section>
 <section id="deteccion-de-valores-atipicos">
 <h4><strong>Detección de valores atípicos</strong><a class="headerlink" href="#deteccion-de-valores-atipicos" title="Permalink to this heading">#</a></h4>
@@ -1100,15 +1106,17 @@ Categóricas: 38
 <p>En general, la presencia de outliers es consistente con la naturaleza de los datos financieros, donde es común encontrar valores extremos en variables relacionadas con ingresos, endeudamiento y comportamiento crediticio.</p>
 </section>
 <section id="conclusion-del-analisis">
-<h4>Conclusión del análisis<a class="headerlink" href="#conclusion-del-analisis" title="Permalink to this heading">#</a></h4>
+<h4><strong>Conclusión del análisis</strong><a class="headerlink" href="#conclusion-del-analisis" title="Permalink to this heading">#</a></h4>
 <p>El análisis unidimensional de las variables numéricas permite concluir que:</p>
 <ul class="simple">
-<li><p>Existen distribuciones no normales, especialmente en variables económicas.</p></li>
 <li><p>Se presentan valores atípicos significativos en varias variables.</p></li>
 <li><p>Algunas variables muestran alta concentración en valores específicos (principalmente cero).</p></li>
 <li><p>La variabilidad observada refleja la diversidad de perfiles financieros en el dataset.</p></li>
 </ul>
-<p>Estos hallazgos serán considerados en etapas posteriores del proyecto, especialmente en el preprocesamiento de datos y en la selección de modelos adecuados.</p>
+</section>
+<section id="histogramas">
+<h4><strong>Histogramas</strong><a class="headerlink" href="#histogramas" title="Permalink to this heading">#</a></h4>
+<p>Para una mejor comprensión visual se desarrollaron los siguientes histogramas por variable:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
@@ -1196,7 +1204,6 @@ Categóricas: 38
 <img alt="_images/ab7e2c48dc8a10a3d697885f100318109d390b08aca49c80aac0c008b1de19ee.png" src="_images/ab7e2c48dc8a10a3d697885f100318109d390b08aca49c80aac0c008b1de19ee.png" />
 </div>
 </div>
-<p>Para facilitar la inspección visual, los diagramas de caja se presentan en formato mosaico. Este formato permite comparar de manera compacta la dispersión, la mediana y la presencia de valores atípicos en las variables numéricas seleccionadas.</p>
 <p>En variables con valores extremos muy elevados, la visualización puede complementarse con una versión recortada al percentil 99 únicamente con fines gráficos, sin modificar el análisis estadístico realizado sobre los datos originales.</p>
 </section>
 <section id="evaluacion-de-normalidad-de-las-variables-numericas">
@@ -1309,8 +1316,7 @@ Categóricas: 38
 <p>En particular, <code class="docutils literal notranslate"><span class="pre">annual_inc</span></code> presenta una asimetría extremadamente alta, lo cual indica una distribución fuertemente sesgada hacia la derecha, consistente con la presencia de ingresos excepcionalmente altos. De manera similar, <code class="docutils literal notranslate"><span class="pre">dti</span></code> también presenta una asimetría muy elevada, lo que sugiere la existencia de valores extremos y una fuerte concentración de observaciones en rangos bajos o medios.</p>
 <p>Las variables <code class="docutils literal notranslate"><span class="pre">open_acc</span></code>, <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> y <code class="docutils literal notranslate"><span class="pre">total_acc</span></code> presentan asimetría alta, aunque en menor magnitud, mientras que <code class="docutils literal notranslate"><span class="pre">loan_amnt</span></code> e <code class="docutils literal notranslate"><span class="pre">int_rate</span></code> presentan una asimetría moderada. Por otro lado, <code class="docutils literal notranslate"><span class="pre">revol_util</span></code> muestra una asimetría baja, lo que indica una distribución relativamente más equilibrada.</p>
 <p>En conjunto, estos resultados sugieren que no se cumple el supuesto de normalidad en varias de las variables analizadas, lo cual es frecuente en datasets financieros.</p>
-<p>Por lo tanto, en etapas posteriores podría evaluarse la aplicación de transformaciones en variables altamente sesgadas, especialmente <code class="docutils literal notranslate"><span class="pre">annual_inc</span></code>. No obstante, en variables como <code class="docutils literal notranslate"><span class="pre">dti</span></code>, antes de considerar transformaciones como logaritmos o Box-Cox, sería necesario revisar cuidadosamente la presencia de valores atípicos o no válidos, dado que se observaron valores extremos en el análisis descriptivo.</p>
-<p>Cabe resaltar que la evaluación de normalidad se realizó mediante asimetría debido al tamaño del conjunto de datos, ya que pruebas formales como Shapiro-Wilk no resultan prácticas en muestras de esta magnitud.</p>
+<p>Por lo tanto, en etapas posteriores podría evaluarse la aplicación de transformaciones en variables altamente sesgadas, especialmente <code class="docutils literal notranslate"><span class="pre">annual_inc</span></code>.</p>
 </section>
 </section>
 </section>
@@ -1389,7 +1395,8 @@ Categóricas: 38
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#estadisticas-descriptivas"><strong>Estadísticas descriptivas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-del-rango-intercuartilico-iqr"><strong>Análisis del rango intercuartílico (IQR)</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#deteccion-de-valores-atipicos"><strong>Detección de valores atípicos</strong></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-del-analisis">Conclusión del análisis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-del-analisis"><strong>Conclusión del análisis</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#histogramas"><strong>Histogramas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#diagramas-de-caja-de-variables-numericas"><strong>Diagramas de caja de variables numéricas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-de-normalidad-de-las-variables-numericas"><strong>Evaluación de normalidad de las variables numéricas</strong></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-asimetria-de-las-variables-numericas"><strong>Interpretación de la asimetría de las variables numéricas</strong></a></li>

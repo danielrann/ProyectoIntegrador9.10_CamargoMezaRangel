@@ -65,7 +65,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Comparación de resultados: scikit-learn vs PySpark" href="11_comparacion_resultados.html" />
-    <link rel="prev" title="Preprocesamiento para PySpark" href="07_preprocesamiento_pyspark.html" />
+    <link rel="prev" title="Modelado con PySpark" href="09_modelo_pyspark.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -136,8 +136,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/Uninorte-logo.jpg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/Uninorte-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">Proyecto Integrador ML</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -158,6 +164,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_modelo_sklearn.html"><strong>Modelado Con scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_modelo_pyspark.html"><strong>Modelado con PySpark</strong></a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Interpretabilidad con LIME</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
 </ul>
@@ -576,7 +584,7 @@ document.write(`
 <section id="preparacion-de-lime">
 <h2><strong>Preparación de LIME</strong><a class="headerlink" href="#preparacion-de-lime" title="Permalink to this heading">#</a></h2>
 <p>Dado que LIME trabaja en memoria local, se utilizará el modelo de scikit-learn y el conjunto de entrenamiento transformado para construir el explicador local.</p>
-<p>El objetivo es interpretar una o dos instancias clasificadas erróneamente, identificando cuáles variables contribuyeron más a la predicción del modelo.</p>
+<p>El objetivo es interpretar una instancia clasificada erróneamente, identificando cuáles variables contribuyeron más a la predicción del modelo.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train_transformed</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s2">&quot;preprocessor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
@@ -717,8 +725,8 @@ Name: 1023051, dtype: object
 </section>
 <section id="interpretacion-local-con-lime">
 <h2><strong>Interpretación local con LIME</strong><a class="headerlink" href="#interpretacion-local-con-lime" title="Permalink to this heading">#</a></h2>
-<p>La explicación local generada por LIME muestra cuáles variables influyeron más en la predicción realizada por el modelo para esta instancia específica, que corresponde a un <strong>falso negativo</strong>: un préstamo realmente en default (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>) pero clasificado por el modelo como no default (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p>
-<p>Entre los factores con mayor peso hacia la predicción de <strong>no default</strong>, destaca la variable <code class="docutils literal notranslate"><span class="pre">int_rate</span></code>, cuyo valor transformado aparece en un rango bajo (<code class="docutils literal notranslate"><span class="pre">num__int_rate</span> <span class="pre">&lt;=</span> <span class="pre">-0.75</span></code>). Esto es consistente con la observación de que tasas de interés bajas suelen asociarse con menor riesgo percibido por el modelo.</p>
+<p>La explicación local generada por LIME muestra cuáles variables influyeron más en la predicción realizada por el modelo para esta instancia específica, que corresponde a un <strong>falso negativo</strong>: un préstamo realmente en <code class="docutils literal notranslate"><span class="pre">Charged</span> <span class="pre">Off</span></code> (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>) pero clasificado por el modelo como <code class="docutils literal notranslate"><span class="pre">Fully</span> <span class="pre">Paid</span></code> (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p>
+<p>Entre los factores con mayor peso hacia la predicción de <strong>Fully Paid</strong>, destaca la variable <code class="docutils literal notranslate"><span class="pre">int_rate</span></code>, cuyo valor transformado aparece en un rango bajo (<code class="docutils literal notranslate"><span class="pre">num__int_rate</span> <span class="pre">&lt;=</span> <span class="pre">-0.75</span></code>). Esto es consistente con la observación de que tasas de interés bajas suelen asociarse con menor riesgo percibido por el modelo.</p>
 <p>También aparecen varias variables categóricas relacionadas con el estado (<code class="docutils literal notranslate"><span class="pre">addr_state</span></code>) y con el propósito del préstamo (<code class="docutils literal notranslate"><span class="pre">purpose</span></code>). En particular, la ausencia de categorías de alto riesgo como <code class="docutils literal notranslate"><span class="pre">small_business</span></code> o <code class="docutils literal notranslate"><span class="pre">renewable_energy</span></code> contribuyó a empujar la predicción hacia la clase 0.</p>
 <p>En conjunto, la explicación sugiere que el modelo interpretó esta observación como un caso de bajo riesgo debido a señales favorables como una tasa de interés reducida y la ausencia de ciertas categorías asociadas con mayores tasas de default. Sin embargo, en la realidad se trataba de un préstamo que sí terminó en incumplimiento, lo cual evidencia una limitación del modelo para capturar todos los patrones que explican la clase positiva.</p>
 <div class="cell docutils container">
@@ -742,9 +750,9 @@ Name: 1023051, dtype: object
 </div>
 <section id="visualizacion-local-de-la-explicacion">
 <h3><strong>Visualización local de la explicación</strong><a class="headerlink" href="#visualizacion-local-de-la-explicacion" title="Permalink to this heading">#</a></h3>
-<p>El gráfico local de LIME permite observar de manera visual qué variables empujaron la predicción del modelo hacia la clase <strong>Default</strong> y cuáles la alejaron de dicha clase.</p>
-<p>En esta explicación, las barras verdes representan variables que aumentan la probabilidad de default, mientras que las barras rojas representan variables que empujan la predicción hacia la clase contraria.</p>
-<p>Se observa que la variable con mayor influencia local es <code class="docutils literal notranslate"><span class="pre">int_rate</span></code>, cuyo valor bajo contribuyó fuertemente a que el modelo redujera la probabilidad estimada de default para esta observación. Asimismo, la ausencia de ciertas categorías asociadas con mayor riesgo, como <code class="docutils literal notranslate"><span class="pre">small_business</span></code> o <code class="docutils literal notranslate"><span class="pre">renewable_energy</span></code>, también contribuyó a desplazar la predicción hacia la clase no default.</p>
+<p>El gráfico local de LIME permite observar de manera visual qué variables empujaron la predicción del modelo hacia la clase <strong>Fully Paid</strong> y cuáles la alejaron de dicha clase.</p>
+<p>En esta explicación, las barras verdes representan variables que aumentan la probabilidad de <code class="docutils literal notranslate"><span class="pre">Charged</span> <span class="pre">Off</span></code>, mientras que las barras rojas representan variables que empujan la predicción hacia la clase contraria.</p>
+<p>Se observa que la variable con mayor influencia local es <code class="docutils literal notranslate"><span class="pre">int_rate</span></code>, cuyo valor bajo contribuyó fuertemente a que el modelo redujera la probabilidad estimada de default para esta observación. Asimismo, la ausencia de ciertas categorías asociadas con mayor riesgo, como <code class="docutils literal notranslate"><span class="pre">small_business</span></code> o <code class="docutils literal notranslate"><span class="pre">renewable_energy</span></code>.</p>
 <p>En conjunto, la visualización confirma que el modelo basó su decisión en señales localmente coherentes con su lógica interna, aunque en este caso dichas señales no fueron suficientes para identificar correctamente el incumplimiento real de la instancia analizada.</p>
 </section>
 </section>
@@ -788,12 +796,12 @@ Name: 1023051, dtype: object
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="07_preprocesamiento_pyspark.html"
+       href="09_modelo_pyspark.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><strong>Preprocesamiento para PySpark</strong></p>
+        <p class="prev-next-title"><strong>Modelado con PySpark</strong></p>
       </div>
     </a>
     <a class="right-next"

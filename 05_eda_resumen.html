@@ -136,8 +136,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/Uninorte-logo.jpg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/Uninorte-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">Proyecto Integrador ML</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -158,6 +164,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_modelo_sklearn.html"><strong>Modelado Con scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_modelo_pyspark.html"><strong>Modelado con PySpark</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="10_lime_interpretabilidad.html"><strong>Interpretabilidad con LIME</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
 </ul>
@@ -333,7 +341,7 @@ document.write(`
 <tr class="row-even"><td><p><strong>Calidad de los datos</strong></p></td>
 <td><p>El dataset presenta una alta dimensionalidad, con predominio de variables numéricas y presencia de valores faltantes en múltiples columnas. Para el análisis se aplicó un criterio de completitud, conservando variables con un nivel de cobertura adecuado.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Variables más prometedoras para predecir default</strong></p></td>
+<tr class="row-odd"><td><p><strong>Variables más relevantes para predecir default</strong></p></td>
 <td><p>Entre las variables numéricas, <code class="docutils literal notranslate"><span class="pre">int_rate</span></code> y <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> mostraron la asociación más clara con <code class="docutils literal notranslate"><span class="pre">default</span></code>, seguidas por <code class="docutils literal notranslate"><span class="pre">revol_util</span></code> y <code class="docutils literal notranslate"><span class="pre">dti</span></code>. Entre las variables categóricas, <code class="docutils literal notranslate"><span class="pre">purpose</span></code>, <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code>, <code class="docutils literal notranslate"><span class="pre">addr_state</span></code> y <code class="docutils literal notranslate"><span class="pre">emp_length</span></code> mostraron diferencias relevantes en sus tasas de impago.</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Problemas detectados</strong></p></td>

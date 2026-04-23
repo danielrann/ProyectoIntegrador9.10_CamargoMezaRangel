@@ -136,8 +136,14 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   
+    
+    
+      
+    
+    
+    <img src="_static/Uninorte-logo.jpg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/Uninorte-logo.jpg" class="logo__image only-dark" alt="Logo image"/>`);</script>
   
-    <p class="title logo__title">Proyecto Integrador ML</p>
   
 </a></div>
         <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -158,6 +164,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_modelo_sklearn.html"><strong>Modelado Con scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_modelo_pyspark.html"><strong>Modelado con PySpark</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="10_lime_interpretabilidad.html"><strong>Interpretabilidad con LIME</strong></a></li>
 <li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
 </ul>
@@ -347,7 +355,7 @@ document.write(`
 </div>
 <section id="identificacion-de-variables-categoricas">
 <h2><strong>Identificación de variables categóricas</strong><a class="headerlink" href="#identificacion-de-variables-categoricas" title="Permalink to this heading">#</a></h2>
-<p>En primer lugar, se identifican las variables categóricas presentes en el dataset para posteriormente evaluar su nivel de completitud y seleccionar aquellas más relevantes para el análisis.</p>
+<p>En primer lugar, se identifican las variables categóricas presentes en el dataset para posteriormente la cantidad de datos en cada una y seleccionar aquellas más relevantes para el análisis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">categorical_cols</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -365,7 +373,7 @@ document.write(`
 </section>
 <section id="valores-faltantes-en-variables-categoricas">
 <h2><strong>Valores faltantes en variables categóricas</strong><a class="headerlink" href="#valores-faltantes-en-variables-categoricas" title="Permalink to this heading">#</a></h2>
-<p>Se calcula la cantidad y el porcentaje de valores faltantes por variable categórica, con el fin de identificar aquellas que presentan un nivel de completitud adecuado para su análisis.</p>
+<p>Se calcula la cantidad y el porcentaje de valores faltantes por variable categórica, con el fin de identificar aquellas que presentan un nivel adecuado para su análisis.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missing_cat</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">categorical_cols</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -508,8 +516,7 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<p>Con base en el análisis de valores faltantes, se utilizará un umbral preliminar del 30% para identificar variables categóricas con un nivel de completitud adecuado.</p>
-<p>Este criterio no implica una eliminación automática, sino que funciona como filtro inicial para seleccionar variables candidatas al análisis detallado.</p>
+<p>Con base en el análisis de valores faltantes, se utilizará un umbral preliminar del 30% para identificar variables con suficientes datos para los modelos.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">threshold</span> <span class="o">=</span> <span class="mi">30</span>
@@ -558,7 +565,7 @@ document.write(`
 </section>
 <section id="seleccion-de-variables-categoricas-para-el-analisis">
 <h2><strong>Selección de variables categóricas para el análisis</strong><a class="headerlink" href="#seleccion-de-variables-categoricas-para-el-analisis" title="Permalink to this heading">#</a></h2>
-<p>A partir del conjunto de variables categóricas que cumplen con el criterio de tener un porcentaje de valores faltantes menor o igual al 30%, se selecciona un subconjunto de variables relevantes para el análisis exploratorio detallado.</p>
+<p>Se observa que hay 24 variables categóricas que cumplen la condición del umbral. A partir de este conjunto de variables se selecciona un subconjunto de variables relevantes para el análisis exploratorio detallado.</p>
 <p>La selección se realiza considerando dos criterios principales:</p>
 <ul class="simple">
 <li><p>su relevancia para el problema de predicción de default,</p></li>
@@ -643,7 +650,6 @@ document.write(`
 </table>
 </div></div></div>
 </div>
-<p>Las variables categóricas seleccionadas presentan porcentajes de valores faltantes iguales o inferiores al 30%, por lo que se consideran adecuadas para el análisis exploratorio.</p>
 <p>En etapas posteriores de preprocesamiento, los valores faltantes podrán tratarse mediante imputación por moda, creación de una categoría específica como “Desconocido” o, en casos particulares, mediante eliminación si el contexto lo justifica.</p>
 <p>A continuación se presentan los valores y sus frecuencias en número y porcentaje para cada variable.</p>
 <div class="cell docutils container">
@@ -1391,7 +1397,7 @@ Name: addr_state, dtype: float64
 </div></div></div>
 </div>
 <p>La distribución de la variable objetivo muestra un claro desbalance de clases.</p>
-<p>En particular, el <strong>88.12%</strong> de los registros corresponde a la clase <strong>0</strong> (préstamos que no fueron clasificados como <code class="docutils literal notranslate"><span class="pre">Charged</span> <span class="pre">Off</span></code>), mientras que solo el <strong>11.88%</strong> corresponde a la clase <strong>1</strong> (préstamos en default).</p>
+<p>En particular, el <strong>88.12%</strong> de los registros corresponde a la clase <strong>0</strong> (préstamos <code class="docutils literal notranslate"><span class="pre">Fully</span> <span class="pre">Paid</span></code>), mientras que solo el <strong>11.88%</strong> corresponde a la clase <strong>1</strong> (préstamos <code class="docutils literal notranslate"><span class="pre">Charged</span> <span class="pre">Off</span></code>).</p>
 <p>Este comportamiento indica que el dataset está desbalanceado hacia la clase mayoritaria, lo cual es habitual en problemas de riesgo crediticio, donde los casos de incumplimiento representan una proporción menor del total de préstamos.</p>
 <p>Desde el punto de vista del modelado, este desbalance deberá ser considerado en etapas posteriores, ya que puede afectar el desempeño de los algoritmos de clasificación y sesgar las predicciones hacia la clase mayoritaria. Por esta razón, será importante utilizar partición estratificada y métricas adecuadas.</p>
 <div class="cell docutils container">
