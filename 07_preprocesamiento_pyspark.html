@@ -1,0 +1,820 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Preprocesamiento para PySpark &#8212; Proyecto Integrador ML</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '07_preprocesamiento_pyspark';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Interpretabilidad con LIME" href="10_lime_interpretabilidad.html" />
+    <link rel="prev" title="Preprocesamiento para scikit-learn" href="06_preprocesamiento_sklearn.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="ProyectoIntegrador.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Proyecto Integrador ML</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="ProyectoIntegrador.html">
+                    Proyecto Integrador de Aprendizaje Automático
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_dataset_target.html">Dataset y Variable Objetivo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_eda.html"><strong>Análisis Exploratorio de Datos (EDA) - Numéricas</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_edacat.html"><strong>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_eda_bidimensional.html"><strong>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_lime_interpretabilidad.html"><strong>Interpretabilidad con LIME</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/07_preprocesamiento_pyspark.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Preprocesamiento para PySpark</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#carga-del-dataset-completo-en-spark"><strong>Carga del dataset completo en Spark</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-de-variables"><strong>Selección de variables</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codificacion-de-variables-categoricas-en-pyspark"><strong>Codificación de variables categóricas en PySpark</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correccion-de-tipos-de-datos"><strong>Corrección de tipos de datos</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tratamiento-de-valores-faltantes-en-pyspark"><strong>Tratamiento de valores faltantes en PySpark</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ensamblado-de-variables"><strong>Ensamblado de variables</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#almacenamiento-en-memoria-del-dataframe-transformado"><strong>Almacenamiento en memoria del DataFrame transformado</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#division-en-entrenamiento-y-prueba"><strong>División en entrenamiento y prueba</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultado-de-la-particion-en-pyspark"><strong>Resultado de la partición en PySpark</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verificacion-de-la-distribucion-de-clases"><strong>Verificación de la distribución de clases</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-de-la-seccion"><strong>Conclusión de la sección</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="preprocesamiento-para-pyspark">
+<h1><strong>Preprocesamiento para PySpark</strong><a class="headerlink" href="#preprocesamiento-para-pyspark" title="Permalink to this heading">#</a></h1>
+<p>En esta sección se realiza el preprocesamiento de los datos para el flujo de modelado con PySpark.</p>
+<p>Se trabaja con el dataset completo en formato distribuido, evitando cualquier conversión a pandas o transferencia masiva de datos al driver.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">when</span><span class="p">,</span> <span class="n">col</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">master</span><span class="p">(</span><span class="s2">&quot;local[*]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;PreprocesamientoPySpark&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="carga-del-dataset-completo-en-spark">
+<h2><strong>Carga del dataset completo en Spark</strong><a class="headerlink" href="#carga-del-dataset-completo-en-spark" title="Permalink to this heading">#</a></h2>
+<p>El dataset se carga directamente en una <code class="docutils literal notranslate"><span class="pre">SparkSession</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\Daniel Rangel\Documents\MachineLearning\Data\accepted_2007_to_2018Q4.csv.gz&quot;</span>
+
+<span class="n">df_spark</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">spark</span><span class="o">.</span><span class="n">read</span>
+    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;inferSchema&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">df_spark</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+    <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">when</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;loan_status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;Charged Off&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de columnas:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_spark</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de filas:&quot;</span><span class="p">,</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Número de columnas: 152
+Número de filas: 2260701
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="seleccion-de-variables">
+<h2><strong>Selección de variables</strong><a class="headerlink" href="#seleccion-de-variables" title="Permalink to this heading">#</a></h2>
+<p>Se seleccionan las mismas variables utilizadas en el flujo de scikit-learn, con el fin de mantener consistencia entre ambos enfoques y permitir una comparación más justa del desempeño de las herramientas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;loan_amnt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;int_rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fico_range_high&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;annual_inc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dti&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;revol_util&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;open_acc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;total_acc&quot;</span>
+<span class="p">]</span>
+
+<span class="n">cat_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;emp_length&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;purpose&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;home_ownership&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;addr_state&quot;</span>
+<span class="p">]</span>
+
+<span class="n">selected_vars</span> <span class="o">=</span> <span class="n">num_vars</span> <span class="o">+</span> <span class="n">cat_vars</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
+<span class="n">df_spark_model</span> <span class="o">=</span> <span class="n">df_spark</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">selected_vars</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columnas seleccionadas:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">selected_vars</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de columnas seleccionadas:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df_spark_model</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de filas:&quot;</span><span class="p">,</span> <span class="n">df_spark_model</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Columnas seleccionadas:
+[&#39;loan_amnt&#39;, &#39;int_rate&#39;, &#39;fico_range_high&#39;, &#39;annual_inc&#39;, &#39;dti&#39;, &#39;revol_util&#39;, &#39;open_acc&#39;, &#39;total_acc&#39;, &#39;emp_length&#39;, &#39;purpose&#39;, &#39;home_ownership&#39;, &#39;addr_state&#39;, &#39;default&#39;]
+Número de columnas seleccionadas: 13
+Número de filas: 2260701
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="codificacion-de-variables-categoricas-en-pyspark">
+<h2><strong>Codificación de variables categóricas en PySpark</strong><a class="headerlink" href="#codificacion-de-variables-categoricas-en-pyspark" title="Permalink to this heading">#</a></h2>
+<p>Siguiendo la guía del proyecto, las variables categóricas se codifican utilizando <code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code> y <code class="docutils literal notranslate"><span class="pre">OneHotEncoder</span></code>.</p>
+<p>Este proceso permite transformar las categorías textuales en una representación numérica adecuada para el modelado, manteniendo siempre los datos en formato DataFrame de Spark.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">StringIndexer</span><span class="p">,</span> <span class="n">OneHotEncoder</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">indexers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">StringIndexer</span><span class="p">(</span>
+        <span class="n">inputCol</span><span class="o">=</span><span class="n">col_name</span><span class="p">,</span>
+        <span class="n">outputCol</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2">_indexed&quot;</span><span class="p">,</span>
+        <span class="n">handleInvalid</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">cat_vars</span>
+<span class="p">]</span>
+
+<span class="n">encoder</span> <span class="o">=</span> <span class="n">OneHotEncoder</span><span class="p">(</span>
+    <span class="n">inputCols</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2">_indexed&quot;</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">],</span>
+    <span class="n">outputCols</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2">_encoded&quot;</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">],</span>
+    <span class="n">handleInvalid</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables categóricas originales:&quot;</span><span class="p">,</span> <span class="n">cat_vars</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columnas indexadas:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2">_indexed&quot;</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columnas codificadas:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2">_encoded&quot;</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variables categóricas originales: [&#39;emp_length&#39;, &#39;purpose&#39;, &#39;home_ownership&#39;, &#39;addr_state&#39;]
+Columnas indexadas: [&#39;emp_length_indexed&#39;, &#39;purpose_indexed&#39;, &#39;home_ownership_indexed&#39;, &#39;addr_state_indexed&#39;]
+Columnas codificadas: [&#39;emp_length_encoded&#39;, &#39;purpose_encoded&#39;, &#39;home_ownership_encoded&#39;, &#39;addr_state_encoded&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="correccion-de-tipos-de-datos">
+<h3><strong>Corrección de tipos de datos</strong><a class="headerlink" href="#correccion-de-tipos-de-datos" title="Permalink to this heading">#</a></h3>
+<p>Antes de aplicar el pipeline de transformación, es necesario asegurar que las variables numéricas se encuentren en formato numérico dentro de Spark, ya que algunas columnas fueron interpretadas como tipo <code class="docutils literal notranslate"><span class="pre">string</span></code> durante la lectura del archivo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">col</span>
+
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">num_vars</span><span class="p">:</span>
+    <span class="n">df_spark_model</span> <span class="o">=</span> <span class="n">df_spark_model</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">))</span>
+
+<span class="n">df_spark_model</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>root
+ |-- loan_amnt: double (nullable = true)
+ |-- int_rate: double (nullable = true)
+ |-- fico_range_high: double (nullable = true)
+ |-- annual_inc: double (nullable = true)
+ |-- dti: double (nullable = true)
+ |-- revol_util: double (nullable = true)
+ |-- open_acc: double (nullable = true)
+ |-- total_acc: double (nullable = true)
+ |-- emp_length: string (nullable = true)
+ |-- purpose: string (nullable = true)
+ |-- home_ownership: string (nullable = true)
+ |-- addr_state: string (nullable = true)
+ |-- default: integer (nullable = false)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="tratamiento-de-valores-faltantes-en-pyspark">
+<h2><strong>Tratamiento de valores faltantes en PySpark</strong><a class="headerlink" href="#tratamiento-de-valores-faltantes-en-pyspark" title="Permalink to this heading">#</a></h2>
+<p>Antes de ensamblar las variables en un vector de características, es necesario imputar los valores faltantes de las variables numéricas.</p>
+<p>En este caso, se utilizará imputación por mediana o media según la disponibilidad de las herramientas de PySpark, con el fin de evitar valores <code class="docutils literal notranslate"><span class="pre">NaN</span></code> en el vector final de características.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">Imputer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">imputer</span> <span class="o">=</span> <span class="n">Imputer</span><span class="p">(</span>
+    <span class="n">inputCols</span><span class="o">=</span><span class="n">num_vars</span><span class="p">,</span>
+    <span class="n">outputCols</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">_imputed&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">num_vars</span><span class="p">]</span>
+<span class="p">)</span><span class="o">.</span><span class="n">setStrategy</span><span class="p">(</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columnas numéricas originales:&quot;</span><span class="p">,</span> <span class="n">num_vars</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Columnas numéricas imputadas:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">_imputed&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">num_vars</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Columnas numéricas originales: [&#39;loan_amnt&#39;, &#39;int_rate&#39;, &#39;fico_range_high&#39;, &#39;annual_inc&#39;, &#39;dti&#39;, &#39;revol_util&#39;, &#39;open_acc&#39;, &#39;total_acc&#39;]
+Columnas numéricas imputadas: [&#39;loan_amnt_imputed&#39;, &#39;int_rate_imputed&#39;, &#39;fico_range_high_imputed&#39;, &#39;annual_inc_imputed&#39;, &#39;dti_imputed&#39;, &#39;revol_util_imputed&#39;, &#39;open_acc_imputed&#39;, &#39;total_acc_imputed&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="ensamblado-de-variables">
+<h2><strong>Ensamblado de variables</strong><a class="headerlink" href="#ensamblado-de-variables" title="Permalink to this heading">#</a></h2>
+<p>Una vez codificadas las variables categóricas, se ensamblan las variables numéricas y categóricas transformadas en un único vector de características mediante <code class="docutils literal notranslate"><span class="pre">VectorAssembler</span></code>.</p>
+<p>Posteriormente, se aplica <code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code> con el fin de obtener una representación escalada de las variables numéricas y codificadas. Finalmente, el DataFrame resultante se almacenará en memoria para optimizar el entrenamiento posterior del modelo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.ml.feature</span> <span class="kn">import</span> <span class="n">VectorAssembler</span>
+<span class="kn">from</span> <span class="nn">pyspark.ml</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">StorageLevel</span>
+
+<span class="n">assembler_inputs</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">_imputed&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">num_vars</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col_name</span><span class="si">}</span><span class="s2">_encoded&quot;</span> <span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">]</span>
+
+<span class="n">assembler</span> <span class="o">=</span> <span class="n">VectorAssembler</span><span class="p">(</span>
+    <span class="n">inputCols</span><span class="o">=</span><span class="n">assembler_inputs</span><span class="p">,</span>
+    <span class="n">outputCol</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">,</span>
+    <span class="n">handleInvalid</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span>
+<span class="p">)</span>
+
+<span class="n">pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">stages</span><span class="o">=</span><span class="n">indexers</span> <span class="o">+</span> <span class="p">[</span><span class="n">encoder</span><span class="p">,</span> <span class="n">imputer</span><span class="p">,</span> <span class="n">assembler</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline_model</span> <span class="o">=</span> <span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_spark_model</span><span class="p">)</span>
+<span class="n">df_spark_prepared</span> <span class="o">=</span> <span class="n">pipeline_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df_spark_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="almacenamiento-en-memoria-del-dataframe-transformado">
+<h2><strong>Almacenamiento en memoria del DataFrame transformado</strong><a class="headerlink" href="#almacenamiento-en-memoria-del-dataframe-transformado" title="Permalink to this heading">#</a></h2>
+<p>Siguiendo la guía del proyecto, el DataFrame resultante se almacena en memoria después del ensamblado de variables y antes del entrenamiento del modelo, con el fin de optimizar el procesamiento posterior en PySpark.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">StorageLevel</span>
+
+<span class="n">df_spark_prepared</span> <span class="o">=</span> <span class="n">df_spark_prepared</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_spark_prepared</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>+-------+
+|default|
++-------+
+|      0|
+|      0|
+|      0|
+|      0|
+|      0|
++-------+
+only showing top 5 rows
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="division-en-entrenamiento-y-prueba">
+<h2><strong>División en entrenamiento y prueba</strong><a class="headerlink" href="#division-en-entrenamiento-y-prueba" title="Permalink to this heading">#</a></h2>
+<p>Una vez preparado y almacenado en memoria el DataFrame transformado, se realiza la partición en conjuntos de entrenamiento y prueba con una proporción 80/20, manteniendo siempre los datos en formato DataFrame de Spark.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_spark</span><span class="p">,</span> <span class="n">test_spark</span> <span class="o">=</span> <span class="n">df_spark_prepared</span><span class="o">.</span><span class="n">randomSplit</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Filas train:&quot;</span><span class="p">,</span> <span class="n">train_spark</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Filas test:&quot;</span><span class="p">,</span> <span class="n">test_spark</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filas train: 1808391
+Filas test: 452310
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="resultado-de-la-particion-en-pyspark">
+<h2><strong>Resultado de la partición en PySpark</strong><a class="headerlink" href="#resultado-de-la-particion-en-pyspark" title="Permalink to this heading">#</a></h2>
+<p>La partición del dataset en PySpark produjo <strong>1,808,391</strong> observaciones para entrenamiento y <strong>452,310</strong> para prueba, lo cual corresponde aproximadamente a una división 80/20, en línea con la guía del proyecto.</p>
+<p>A diferencia del flujo en scikit-learn, la partición se realizó mediante <code class="docutils literal notranslate"><span class="pre">randomSplit</span></code>, ya que la estratificación exacta no forma parte del procedimiento estándar de partición en PySpark. Por esta razón, resulta conveniente verificar posteriormente la distribución de la variable objetivo en ambos subconjuntos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_dist</span> <span class="o">=</span> <span class="n">train_spark</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+<span class="n">test_dist</span> <span class="o">=</span> <span class="n">test_spark</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distribución en train:&quot;</span><span class="p">)</span>
+<span class="n">train_dist</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distribución en test:&quot;</span><span class="p">)</span>
+<span class="n">test_dist</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Distribución en train:
++-------+-------+
+|default|  count|
++-------+-------+
+|      0|1593823|
+|      1| 214568|
++-------+-------+
+
+Distribución en test:
++-------+------+
+|default| count|
++-------+------+
+|      0|398320|
+|      1| 53990|
++-------+------+
+</pre></div>
+</div>
+</div>
+</div>
+<section id="verificacion-de-la-distribucion-de-clases">
+<h3><strong>Verificación de la distribución de clases</strong><a class="headerlink" href="#verificacion-de-la-distribucion-de-clases" title="Permalink to this heading">#</a></h3>
+<p>La distribución de la variable objetivo en los conjuntos de entrenamiento y prueba se mantiene muy similar a la observada en el dataset original.</p>
+<p>En el conjunto de entrenamiento, la clase <code class="docutils literal notranslate"><span class="pre">0</span></code> continúa siendo ampliamente mayoritaria frente a la clase <code class="docutils literal notranslate"><span class="pre">1</span></code>, y el mismo patrón se observa en el conjunto de prueba. Esto indica que, aunque <code class="docutils literal notranslate"><span class="pre">randomSplit</span></code> no garantiza una estratificación exacta, en este caso la partición conservó de manera adecuada el desbalance de clases del problema.</p>
+<p>Por lo tanto, los subconjuntos generados en PySpark resultan apropiados para continuar con la etapa de modelado y comparación con el flujo implementado en scikit-learn.</p>
+</section>
+</section>
+<section id="conclusion-de-la-seccion">
+<h2><strong>Conclusión de la sección</strong><a class="headerlink" href="#conclusion-de-la-seccion" title="Permalink to this heading">#</a></h2>
+<p>En esta sección se realizó el preprocesamiento del dataset completo en PySpark, manteniendo los datos en formato distribuido en todo momento. Se seleccionaron variables relevantes, se corrigieron tipos de datos, se imputaron valores faltantes en variables numéricas, se codificaron variables categóricas mediante <code class="docutils literal notranslate"><span class="pre">StringIndexer</span></code> y <code class="docutils literal notranslate"><span class="pre">OneHotEncoder</span></code>, y se ensamblaron las características en un vector final para modelado.</p>
+<p>Asimismo, se almacenó el DataFrame transformado en memoria y se realizó la partición en entrenamiento y prueba, conservando de manera adecuada la distribución de la variable objetivo. Con ello, el flujo de PySpark queda preparado para la etapa de entrenamiento del modelo.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="06_preprocesamiento_sklearn.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Preprocesamiento para scikit-learn</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="10_lime_interpretabilidad.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Interpretabilidad con LIME</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#carga-del-dataset-completo-en-spark"><strong>Carga del dataset completo en Spark</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-de-variables"><strong>Selección de variables</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#codificacion-de-variables-categoricas-en-pyspark"><strong>Codificación de variables categóricas en PySpark</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correccion-de-tipos-de-datos"><strong>Corrección de tipos de datos</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tratamiento-de-valores-faltantes-en-pyspark"><strong>Tratamiento de valores faltantes en PySpark</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ensamblado-de-variables"><strong>Ensamblado de variables</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#almacenamiento-en-memoria-del-dataframe-transformado"><strong>Almacenamiento en memoria del DataFrame transformado</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#division-en-entrenamiento-y-prueba"><strong>División en entrenamiento y prueba</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultado-de-la-particion-en-pyspark"><strong>Resultado de la partición en PySpark</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verificacion-de-la-distribucion-de-clases"><strong>Verificación de la distribución de clases</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-de-la-seccion"><strong>Conclusión de la sección</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Camargo, Meza, Rangel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

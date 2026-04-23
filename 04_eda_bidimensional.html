@@ -1,0 +1,1769 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional &#8212; Proyecto Integrador ML</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '04_eda_bidimensional';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Resumen Ejecutivo Del EDA" href="05_eda_resumen.html" />
+    <link rel="prev" title="Análisis Exploratorio de Datos (EDA) - Categóricas y Target" href="03_edacat.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="ProyectoIntegrador.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Proyecto Integrador ML</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="ProyectoIntegrador.html">
+                    Proyecto Integrador de Aprendizaje Automático
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_dataset_target.html">Dataset y Variable Objetivo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_eda.html"><strong>Análisis Exploratorio de Datos (EDA) - Numéricas</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_edacat.html"><strong>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_lime_interpretabilidad.html"><strong>Interpretabilidad con LIME</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/04_eda_bidimensional.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-entre-variables-numericas-y-la-variable-objetivo"><strong>Relación entre variables numéricas y la variable objetivo</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#diferencia-de-medias-prueba-de-mann-whitney-y-correlacion-punto-biserial"><strong>Diferencia de medias, prueba de Mann-Whitney y correlación punto-biserial</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-entre-variables-categoricas-y-la-variable-objetivo"><strong>Relación entre variables categóricas y la variable objetivo</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-las-tablas-de-contingencia">Interpretación de las tablas de contingencia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-los-graficos-de-barras-apiladas"><strong>Interpretación de los gráficos de barras apiladas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-chi-cuadrado-para-variables-categoricas"><strong>Prueba de chi-cuadrado para variables categóricas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-prueba-de-chi-cuadrado"><strong>Interpretación de la prueba de chi-cuadrado</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-entre-variables-independientes"><strong>Relación entre variables independientes</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-matriz-de-correlacion"><strong>Interpretación de la matriz de correlación</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pares-de-variables-con-mayor-correlacion"><strong>Pares de variables con mayor correlación</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#asociacion-entre-variables-categoricas"><strong>Asociación entre variables categóricas</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-asociacion-entre-variables-categoricas"><strong>Interpretación de la asociación entre variables categóricas</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizaciones-avanzadas-sugeridas"><strong>Visualizaciones avanzadas sugeridas</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-pairplot"><strong>Interpretación del pairplot</strong></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="analisis-exploratorio-de-datos-eda-analisis-bidimensional">
+<h1><strong>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</strong><a class="headerlink" href="#analisis-exploratorio-de-datos-eda-analisis-bidimensional" title="Permalink to this heading">#</a></h1>
+<p>En esta sección se estudia la relación entre las variables seleccionadas y la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>, así como las relaciones entre variables independientes.</p>
+<p>El propósito de este análisis es identificar variables con capacidad explicativa sobre el incumplimiento del préstamo y detectar posibles problemas de redundancia o multicolinealidad que puedan afectar el modelado posterior.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">ttest_ind</span><span class="p">,</span> <span class="n">mannwhitneyu</span><span class="p">,</span> <span class="n">chi2_contingency</span><span class="p">,</span> <span class="n">pointbiserialr</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+
+<span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\Daniel Rangel\Documents\MachineLearning\Data\accepted_2007_to_2018Q4.csv.gz&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;loan_status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;Charged Off&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;loan_amnt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;int_rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;annual_inc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dti&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fico_range_high&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;revol_util&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;open_acc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;total_acc&quot;</span>
+<span class="p">]</span>
+
+<span class="n">cat_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;emp_length&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;purpose&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;home_ownership&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;addr_state&quot;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="relacion-entre-variables-numericas-y-la-variable-objetivo">
+<h2><strong>Relación entre variables numéricas y la variable objetivo</strong><a class="headerlink" href="#relacion-entre-variables-numericas-y-la-variable-objetivo" title="Permalink to this heading">#</a></h2>
+<p>En esta subsección se analiza la relación entre las variables numéricas seleccionadas y la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<p>Para ello, se utilizan visualizaciones comparativas por clase, diferencias de medias y medidas de asociación entre variables numéricas y la variable binaria de incumplimiento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">num_vars</span><span class="p">):</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">col</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">upper</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.99</span><span class="p">)</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">temp</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">upper</span><span class="p">]</span>
+
+    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">temp</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> (hasta p99)&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c39252adbeae45b68035aac76a9deccca779edd984df64188c017544a39d50b4.png" src="_images/c39252adbeae45b68035aac76a9deccca779edd984df64188c017544a39d50b4.png" />
+</div>
+</div>
+<p>Los diagramas de caja permiten comparar visualmente la distribución de cada variable numérica entre préstamos en default y no default, observando diferencias en medianas, dispersión y presencia de valores atípicos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_vs_target_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">num_vars</span><span class="p">:</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">col</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+    <span class="n">group_0</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">temp</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+    <span class="n">group_1</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">temp</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="n">col</span><span class="p">]</span>
+
+    <span class="n">mean_0</span> <span class="o">=</span> <span class="n">group_0</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">mean_1</span> <span class="o">=</span> <span class="n">group_1</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">diff_means</span> <span class="o">=</span> <span class="n">mean_1</span> <span class="o">-</span> <span class="n">mean_0</span>
+
+    <span class="c1"># Mann-Whitney es más robusta aquí por no normalidad</span>
+    <span class="n">stat_mw</span><span class="p">,</span> <span class="n">p_mw</span> <span class="o">=</span> <span class="n">mannwhitneyu</span><span class="p">(</span><span class="n">group_0</span><span class="p">,</span> <span class="n">group_1</span><span class="p">,</span> <span class="n">alternative</span><span class="o">=</span><span class="s2">&quot;two-sided&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Correlación punto-biserial</span>
+    <span class="n">r_pb</span><span class="p">,</span> <span class="n">p_pb</span> <span class="o">=</span> <span class="n">pointbiserialr</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">],</span> <span class="n">temp</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+    <span class="n">num_vs_target_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span>
+        <span class="s2">&quot;mean_default_0&quot;</span><span class="p">:</span> <span class="n">mean_0</span><span class="p">,</span>
+        <span class="s2">&quot;mean_default_1&quot;</span><span class="p">:</span> <span class="n">mean_1</span><span class="p">,</span>
+        <span class="s2">&quot;diff_means&quot;</span><span class="p">:</span> <span class="n">diff_means</span><span class="p">,</span>
+        <span class="s2">&quot;mannwhitney_pvalue&quot;</span><span class="p">:</span> <span class="n">p_mw</span><span class="p">,</span>
+        <span class="s2">&quot;pointbiserial_r&quot;</span><span class="p">:</span> <span class="n">r_pb</span><span class="p">,</span>
+        <span class="s2">&quot;pointbiserial_pvalue&quot;</span><span class="p">:</span> <span class="n">p_pb</span>
+    <span class="p">})</span>
+
+<span class="n">num_vs_target_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">num_vs_target_results</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+    <span class="n">by</span><span class="o">=</span><span class="s2">&quot;pointbiserial_r&quot;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="n">num_vs_target_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable</th>
+      <th>mean_default_0</th>
+      <th>mean_default_1</th>
+      <th>diff_means</th>
+      <th>mannwhitney_pvalue</th>
+      <th>pointbiserial_r</th>
+      <th>pointbiserial_pvalue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>int_rate</td>
+      <td>12.739908</td>
+      <td>15.710714</td>
+      <td>2.970805</td>
+      <td>0.000000e+00</td>
+      <td>0.198918</td>
+      <td>0.000000e+00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>fico_range_high</td>
+      <td>704.036036</td>
+      <td>691.850171</td>
+      <td>-12.185865</td>
+      <td>0.000000e+00</td>
+      <td>-0.119436</td>
+      <td>0.000000e+00</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>revol_util</td>
+      <td>49.741645</td>
+      <td>54.758433</td>
+      <td>5.016788</td>
+      <td>0.000000e+00</td>
+      <td>0.065684</td>
+      <td>0.000000e+00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>dti</td>
+      <td>18.642504</td>
+      <td>20.171196</td>
+      <td>1.528692</td>
+      <td>0.000000e+00</td>
+      <td>0.034880</td>
+      <td>0.000000e+00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>annual_inc</td>
+      <td>79015.876467</td>
+      <td>70400.743283</td>
+      <td>-8615.133185</td>
+      <td>0.000000e+00</td>
+      <td>-0.024734</td>
+      <td>8.421271e-303</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>loan_amnt</td>
+      <td>14977.082178</td>
+      <td>15565.055444</td>
+      <td>587.973266</td>
+      <td>0.000000e+00</td>
+      <td>0.020700</td>
+      <td>1.044396e-212</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>open_acc</td>
+      <td>11.573459</td>
+      <td>11.901269</td>
+      <td>0.327810</td>
+      <td>5.588754e-239</td>
+      <td>0.018803</td>
+      <td>7.405428e-176</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>total_acc</td>
+      <td>24.088836</td>
+      <td>24.709356</td>
+      <td>0.620520</td>
+      <td>1.796855e-140</td>
+      <td>0.016748</td>
+      <td>6.089099e-140</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="diferencia-de-medias-prueba-de-mann-whitney-y-correlacion-punto-biserial">
+<h3><strong>Diferencia de medias, prueba de Mann-Whitney y correlación punto-biserial</strong><a class="headerlink" href="#diferencia-de-medias-prueba-de-mann-whitney-y-correlacion-punto-biserial" title="Permalink to this heading">#</a></h3>
+<p>La comparación entre clases muestra diferencias sistemáticas entre los préstamos en default (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>) y los no default (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">0</span></code>) en varias variables numéricas.</p>
+<p>En particular, la variable <code class="docutils literal notranslate"><span class="pre">int_rate</span></code> presenta la asociación más fuerte con <code class="docutils literal notranslate"><span class="pre">default</span></code>, con una diferencia de medias cercana a 2.97 puntos porcentuales y una correlación punto-biserial positiva de 0.199. Esto sugiere que los préstamos en default tienden a estar asociados con tasas de interés más altas.</p>
+<p>Por su parte, <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> presenta una correlación negativa de -0.119 y una diferencia de medias de aproximadamente -12.19 puntos, lo cual indica que los casos de default tienden a concentrarse en solicitantes con menor puntaje crediticio.</p>
+<p>Variables como <code class="docutils literal notranslate"><span class="pre">revol_util</span></code> y <code class="docutils literal notranslate"><span class="pre">dti</span></code> también muestran asociaciones positivas con <code class="docutils literal notranslate"><span class="pre">default</span></code>, lo que sugiere que un mayor uso del crédito revolvente y un mayor nivel de endeudamiento se relacionan con una mayor probabilidad de incumplimiento.</p>
+<p>En contraste, <code class="docutils literal notranslate"><span class="pre">annual_inc</span></code> presenta una correlación negativa débil, indicando que los préstamos en default tienden, en promedio, a estar asociados con menores ingresos anuales.</p>
+<p>La prueba de Mann-Whitney arroja valores p extremadamente pequeños en todas las variables analizadas, lo que indica que las diferencias entre clases son estadísticamente significativas. Sin embargo, la magnitud de la asociación no es igual en todos los casos: <code class="docutils literal notranslate"><span class="pre">int_rate</span></code> y <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> destacan como las variables numéricas con mayor capacidad discriminante dentro del conjunto evaluado.</p>
+</section>
+</section>
+<section id="relacion-entre-variables-categoricas-y-la-variable-objetivo">
+<h2><strong>Relación entre variables categóricas y la variable objetivo</strong><a class="headerlink" href="#relacion-entre-variables-categoricas-y-la-variable-objetivo" title="Permalink to this heading">#</a></h2>
+<p>En esta subsección se analiza la relación entre las variables categóricas seleccionadas y la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<p>Para ello, se construyen tablas de contingencia que muestran la proporción de default por categoría, se generan visualizaciones comparativas y se aplica la prueba de chi-cuadrado para evaluar la independencia entre cada variable categórica y el incumplimiento del préstamo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Variable: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="n">ctab</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">],</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="n">ctab</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;default_0_pct&quot;</span><span class="p">,</span> <span class="s2">&quot;default_1_pct&quot;</span><span class="p">]</span>
+    
+    <span class="n">display</span><span class="p">(</span><span class="n">ctab</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;default_1_pct&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: emp_length
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>default_0_pct</th>
+      <th>default_1_pct</th>
+    </tr>
+    <tr>
+      <th>emp_length</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>8 years</th>
+      <td>86.835520</td>
+      <td>13.164480</td>
+    </tr>
+    <tr>
+      <th>9 years</th>
+      <td>87.232193</td>
+      <td>12.767807</td>
+    </tr>
+    <tr>
+      <th>7 years</th>
+      <td>87.464265</td>
+      <td>12.535735</td>
+    </tr>
+    <tr>
+      <th>1 year</th>
+      <td>87.737445</td>
+      <td>12.262555</td>
+    </tr>
+    <tr>
+      <th>3 years</th>
+      <td>88.113060</td>
+      <td>11.886940</td>
+    </tr>
+    <tr>
+      <th>2 years</th>
+      <td>88.160666</td>
+      <td>11.839334</td>
+    </tr>
+    <tr>
+      <th>6 years</th>
+      <td>88.170870</td>
+      <td>11.829130</td>
+    </tr>
+    <tr>
+      <th>5 years</th>
+      <td>88.192386</td>
+      <td>11.807614</td>
+    </tr>
+    <tr>
+      <th>&lt; 1 year</th>
+      <td>88.324526</td>
+      <td>11.675474</td>
+    </tr>
+    <tr>
+      <th>4 years</th>
+      <td>88.360602</td>
+      <td>11.639398</td>
+    </tr>
+    <tr>
+      <th>10+ years</th>
+      <td>88.896197</td>
+      <td>11.103803</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: purpose
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>default_0_pct</th>
+      <th>default_1_pct</th>
+    </tr>
+    <tr>
+      <th>purpose</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>small_business</th>
+      <td>81.449228</td>
+      <td>18.550772</td>
+    </tr>
+    <tr>
+      <th>renewable_energy</th>
+      <td>84.705882</td>
+      <td>15.294118</td>
+    </tr>
+    <tr>
+      <th>moving</th>
+      <td>85.626177</td>
+      <td>14.373823</td>
+    </tr>
+    <tr>
+      <th>educational</th>
+      <td>86.792453</td>
+      <td>13.207547</td>
+    </tr>
+    <tr>
+      <th>debt_consolidation</th>
+      <td>87.086864</td>
+      <td>12.913136</td>
+    </tr>
+    <tr>
+      <th>medical</th>
+      <td>87.678260</td>
+      <td>12.321740</td>
+    </tr>
+    <tr>
+      <th>wedding</th>
+      <td>88.152866</td>
+      <td>11.847134</td>
+    </tr>
+    <tr>
+      <th>other</th>
+      <td>88.249426</td>
+      <td>11.750574</td>
+    </tr>
+    <tr>
+      <th>house</th>
+      <td>88.773345</td>
+      <td>11.226655</td>
+    </tr>
+    <tr>
+      <th>vacation</th>
+      <td>88.805153</td>
+      <td>11.194847</td>
+    </tr>
+    <tr>
+      <th>major_purchase</th>
+      <td>89.150560</td>
+      <td>10.849440</td>
+    </tr>
+    <tr>
+      <th>home_improvement</th>
+      <td>89.696724</td>
+      <td>10.303276</td>
+    </tr>
+    <tr>
+      <th>credit_card</th>
+      <td>90.331759</td>
+      <td>9.668241</td>
+    </tr>
+    <tr>
+      <th>car</th>
+      <td>91.083996</td>
+      <td>8.916004</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: home_ownership
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>default_0_pct</th>
+      <th>default_1_pct</th>
+    </tr>
+    <tr>
+      <th>home_ownership</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>OTHER</th>
+      <td>85.164835</td>
+      <td>14.835165</td>
+    </tr>
+    <tr>
+      <th>RENT</th>
+      <td>86.135883</td>
+      <td>13.864117</td>
+    </tr>
+    <tr>
+      <th>NONE</th>
+      <td>87.037037</td>
+      <td>12.962963</td>
+    </tr>
+    <tr>
+      <th>OWN</th>
+      <td>88.198706</td>
+      <td>11.801294</td>
+    </tr>
+    <tr>
+      <th>MORTGAGE</th>
+      <td>89.695353</td>
+      <td>10.304647</td>
+    </tr>
+    <tr>
+      <th>ANY</th>
+      <td>94.377510</td>
+      <td>5.622490</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: addr_state
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>default_0_pct</th>
+      <th>default_1_pct</th>
+    </tr>
+    <tr>
+      <th>addr_state</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>AL</th>
+      <td>85.610614</td>
+      <td>14.389386</td>
+    </tr>
+    <tr>
+      <th>AR</th>
+      <td>85.826403</td>
+      <td>14.173597</td>
+    </tr>
+    <tr>
+      <th>LA</th>
+      <td>86.051477</td>
+      <td>13.948523</td>
+    </tr>
+    <tr>
+      <th>OK</th>
+      <td>86.066406</td>
+      <td>13.933594</td>
+    </tr>
+    <tr>
+      <th>NV</th>
+      <td>86.394954</td>
+      <td>13.605046</td>
+    </tr>
+    <tr>
+      <th>MS</th>
+      <td>86.407152</td>
+      <td>13.592848</td>
+    </tr>
+    <tr>
+      <th>NM</th>
+      <td>86.876356</td>
+      <td>13.123644</td>
+    </tr>
+    <tr>
+      <th>NY</th>
+      <td>87.009427</td>
+      <td>12.990573</td>
+    </tr>
+    <tr>
+      <th>SD</th>
+      <td>87.030117</td>
+      <td>12.969883</td>
+    </tr>
+    <tr>
+      <th>HI</th>
+      <td>87.204724</td>
+      <td>12.795276</td>
+    </tr>
+    <tr>
+      <th>FL</th>
+      <td>87.325839</td>
+      <td>12.674161</td>
+    </tr>
+    <tr>
+      <th>MO</th>
+      <td>87.454273</td>
+      <td>12.545727</td>
+    </tr>
+    <tr>
+      <th>NC</th>
+      <td>87.481269</td>
+      <td>12.518731</td>
+    </tr>
+    <tr>
+      <th>IN</th>
+      <td>87.607624</td>
+      <td>12.392376</td>
+    </tr>
+    <tr>
+      <th>MD</th>
+      <td>87.679603</td>
+      <td>12.320397</td>
+    </tr>
+    <tr>
+      <th>NJ</th>
+      <td>87.690661</td>
+      <td>12.309339</td>
+    </tr>
+    <tr>
+      <th>KY</th>
+      <td>87.691324</td>
+      <td>12.308676</td>
+    </tr>
+    <tr>
+      <th>PA</th>
+      <td>87.698047</td>
+      <td>12.301953</td>
+    </tr>
+    <tr>
+      <th>TN</th>
+      <td>87.701153</td>
+      <td>12.298847</td>
+    </tr>
+    <tr>
+      <th>CA</th>
+      <td>87.746914</td>
+      <td>12.253086</td>
+    </tr>
+    <tr>
+      <th>MI</th>
+      <td>87.832227</td>
+      <td>12.167773</td>
+    </tr>
+    <tr>
+      <th>VA</th>
+      <td>87.949932</td>
+      <td>12.050068</td>
+    </tr>
+    <tr>
+      <th>AK</th>
+      <td>88.013764</td>
+      <td>11.986236</td>
+    </tr>
+    <tr>
+      <th>OH</th>
+      <td>88.021083</td>
+      <td>11.978917</td>
+    </tr>
+    <tr>
+      <th>MN</th>
+      <td>88.025407</td>
+      <td>11.974593</td>
+    </tr>
+    <tr>
+      <th>AZ</th>
+      <td>88.065530</td>
+      <td>11.934470</td>
+    </tr>
+    <tr>
+      <th>TX</th>
+      <td>88.280248</td>
+      <td>11.719752</td>
+    </tr>
+    <tr>
+      <th>DE</th>
+      <td>88.432951</td>
+      <td>11.567049</td>
+    </tr>
+    <tr>
+      <th>NE</th>
+      <td>88.451209</td>
+      <td>11.548791</td>
+    </tr>
+    <tr>
+      <th>UT</th>
+      <td>88.581338</td>
+      <td>11.418662</td>
+    </tr>
+    <tr>
+      <th>MA</th>
+      <td>88.602657</td>
+      <td>11.397343</td>
+    </tr>
+    <tr>
+      <th>WI</th>
+      <td>89.108679</td>
+      <td>10.891321</td>
+    </tr>
+    <tr>
+      <th>GA</th>
+      <td>89.247399</td>
+      <td>10.752601</td>
+    </tr>
+    <tr>
+      <th>RI</th>
+      <td>89.515242</td>
+      <td>10.484758</td>
+    </tr>
+    <tr>
+      <th>WY</th>
+      <td>89.679865</td>
+      <td>10.320135</td>
+    </tr>
+    <tr>
+      <th>IL</th>
+      <td>89.733803</td>
+      <td>10.266197</td>
+    </tr>
+    <tr>
+      <th>MT</th>
+      <td>89.760279</td>
+      <td>10.239721</td>
+    </tr>
+    <tr>
+      <th>KS</th>
+      <td>90.151238</td>
+      <td>9.848762</td>
+    </tr>
+    <tr>
+      <th>WA</th>
+      <td>90.227369</td>
+      <td>9.772631</td>
+    </tr>
+    <tr>
+      <th>CT</th>
+      <td>90.420567</td>
+      <td>9.579433</td>
+    </tr>
+    <tr>
+      <th>CO</th>
+      <td>90.438536</td>
+      <td>9.561464</td>
+    </tr>
+    <tr>
+      <th>SC</th>
+      <td>90.704567</td>
+      <td>9.295433</td>
+    </tr>
+    <tr>
+      <th>ND</th>
+      <td>90.866054</td>
+      <td>9.133946</td>
+    </tr>
+    <tr>
+      <th>WV</th>
+      <td>90.935217</td>
+      <td>9.064783</td>
+    </tr>
+    <tr>
+      <th>OR</th>
+      <td>91.190414</td>
+      <td>8.809586</td>
+    </tr>
+    <tr>
+      <th>DC</th>
+      <td>91.430172</td>
+      <td>8.569828</td>
+    </tr>
+    <tr>
+      <th>NH</th>
+      <td>91.563454</td>
+      <td>8.436546</td>
+    </tr>
+    <tr>
+      <th>VT</th>
+      <td>92.505570</td>
+      <td>7.494430</td>
+    </tr>
+    <tr>
+      <th>ID</th>
+      <td>92.618384</td>
+      <td>7.381616</td>
+    </tr>
+    <tr>
+      <th>IA</th>
+      <td>92.857143</td>
+      <td>7.142857</td>
+    </tr>
+    <tr>
+      <th>ME</th>
+      <td>94.350623</td>
+      <td>5.649377</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="interpretacion-de-las-tablas-de-contingencia">
+<h3>Interpretación de las tablas de contingencia<a class="headerlink" href="#interpretacion-de-las-tablas-de-contingencia" title="Permalink to this heading">#</a></h3>
+<p>Las tablas de contingencia muestran diferencias claras en la tasa de default entre categorías de las variables analizadas, lo que sugiere que estas variables podrían aportar información relevante para el modelado.</p>
+<p>En la variable <code class="docutils literal notranslate"><span class="pre">emp_length</span></code>, se observa que las mayores tasas de default corresponden a categorías intermedias de experiencia laboral, particularmente <code class="docutils literal notranslate"><span class="pre">8</span> <span class="pre">years</span></code>, <code class="docutils literal notranslate"><span class="pre">9</span> <span class="pre">years</span></code> y <code class="docutils literal notranslate"><span class="pre">7</span> <span class="pre">years</span></code>, mientras que la categoría <code class="docutils literal notranslate"><span class="pre">10+</span> <span class="pre">years</span></code> presenta una tasa de impago relativamente menor. En general, las diferencias no son extremadamente amplias, pero sí evidencian cierta variabilidad entre niveles de experiencia.</p>
+<p>En <code class="docutils literal notranslate"><span class="pre">purpose</span></code> se observan contrastes más marcados. Las categorías <code class="docutils literal notranslate"><span class="pre">small_business</span></code>, <code class="docutils literal notranslate"><span class="pre">renewable_energy</span></code> y <code class="docutils literal notranslate"><span class="pre">moving</span></code> presentan las tasas de default más altas, destacándose especialmente <code class="docutils literal notranslate"><span class="pre">small_business</span></code> con una tasa cercana al 18.6%. Por el contrario, categorías como <code class="docutils literal notranslate"><span class="pre">car</span></code> y <code class="docutils literal notranslate"><span class="pre">credit_card</span></code> presentan tasas de impago menores, lo que sugiere que el propósito del préstamo podría constituir un predictor relevante del incumplimiento.</p>
+<p>En cuanto a <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code>, la categoría <code class="docutils literal notranslate"><span class="pre">RENT</span></code> presenta una tasa de default superior a <code class="docutils literal notranslate"><span class="pre">OWN</span></code> y <code class="docutils literal notranslate"><span class="pre">MORTGAGE</span></code>, mientras que <code class="docutils literal notranslate"><span class="pre">MORTGAGE</span></code> muestra una tasa de impago relativamente más baja. Aunque categorías como <code class="docutils literal notranslate"><span class="pre">ANY</span></code>, <code class="docutils literal notranslate"><span class="pre">NONE</span></code> y <code class="docutils literal notranslate"><span class="pre">OTHER</span></code> presentan comportamientos particulares, su interpretación debe realizarse con cautela debido a su baja frecuencia.</p>
+<p>Finalmente, en <code class="docutils literal notranslate"><span class="pre">addr_state</span></code> también se observan diferencias notables entre estados. Algunos estados como <code class="docutils literal notranslate"><span class="pre">AL</span></code>, <code class="docutils literal notranslate"><span class="pre">AR</span></code>, <code class="docutils literal notranslate"><span class="pre">LA</span></code> y <code class="docutils literal notranslate"><span class="pre">OK</span></code> presentan tasas de default relativamente más altas, mientras que otros como <code class="docutils literal notranslate"><span class="pre">ME</span></code>, <code class="docutils literal notranslate"><span class="pre">IA</span></code>, <code class="docutils literal notranslate"><span class="pre">ID</span></code> y <code class="docutils literal notranslate"><span class="pre">VT</span></code> muestran tasas menores. Esto sugiere que la ubicación geográfica podría capturar diferencias regionales relevantes en el comportamiento de pago.</p>
+<p>En conjunto, estas diferencias respaldan la idea de que las variables categóricas seleccionadas contienen señales útiles para distinguir entre préstamos en default y no default.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">main_cat_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;emp_length&quot;</span><span class="p">,</span> <span class="s2">&quot;purpose&quot;</span><span class="p">,</span> <span class="s2">&quot;home_ownership&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">main_cat_vars</span><span class="p">:</span>
+    <span class="n">ctab</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">],</span> <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+    <span class="n">ctab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="n">stacked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tasa de default por categoría: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Proporción&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1a14b7e5a8162b4e62ac32a89115894148e2b278c3a3a0acda5d1b89f9bd85cc.png" src="_images/1a14b7e5a8162b4e62ac32a89115894148e2b278c3a3a0acda5d1b89f9bd85cc.png" />
+<img alt="_images/832d8f45fb5e4a69a6a98dac80de9612e6151fe7c09781ef71a8dd282f8e4733.png" src="_images/832d8f45fb5e4a69a6a98dac80de9612e6151fe7c09781ef71a8dd282f8e4733.png" />
+<img alt="_images/1af8dc9d6848e9f1053fd579e449a1f85993314400cab13e60e19594f635110a.png" src="_images/1af8dc9d6848e9f1053fd579e449a1f85993314400cab13e60e19594f635110a.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_states</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;addr_state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+
+<span class="n">ctab_states</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;addr_state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">top_states</span><span class="p">)][</span><span class="s2">&quot;addr_state&quot;</span><span class="p">],</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;addr_state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">top_states</span><span class="p">)][</span><span class="s2">&quot;default&quot;</span><span class="p">],</span>
+    <span class="n">normalize</span><span class="o">=</span><span class="s2">&quot;index&quot;</span>
+<span class="p">)</span>
+
+<span class="n">ctab_states</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="n">stacked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Tasa de default por categoría: addr_state (Top 15)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Proporción&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;addr_state&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7e1d581c941dbb2417f555e16dc52510ea17e92040cb0e0068185baee3f0296c.png" src="_images/7e1d581c941dbb2417f555e16dc52510ea17e92040cb0e0068185baee3f0296c.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-de-los-graficos-de-barras-apiladas">
+<h3><strong>Interpretación de los gráficos de barras apiladas</strong><a class="headerlink" href="#interpretacion-de-los-graficos-de-barras-apiladas" title="Permalink to this heading">#</a></h3>
+<p>Los gráficos de barras apiladas confirman visualmente el desbalance general de la variable objetivo, con un claro predominio de la clase <code class="docutils literal notranslate"><span class="pre">0</span></code> sobre la clase <code class="docutils literal notranslate"><span class="pre">1</span></code> en todas las variables analizadas. Sin embargo, a pesar de este sesgo global, sí se observan diferencias en la proporción relativa de default entre categorías.</p>
+<p>En <code class="docutils literal notranslate"><span class="pre">emp_length</span></code>, las diferencias entre categorías son relativamente moderadas, aunque algunas categorías intermedias muestran una proporción de default ligeramente superior. Esto sugiere que la experiencia laboral podría tener cierta relación con el incumplimiento, aunque su efecto visual parece menos marcado que en otras variables.</p>
+<p>En <code class="docutils literal notranslate"><span class="pre">purpose</span></code>, el efecto es más evidente. Categorías como <code class="docutils literal notranslate"><span class="pre">small_business</span></code>, <code class="docutils literal notranslate"><span class="pre">renewable_energy</span></code> y <code class="docutils literal notranslate"><span class="pre">moving</span></code> presentan una proporción de default mayor que categorías como <code class="docutils literal notranslate"><span class="pre">car</span></code> o <code class="docutils literal notranslate"><span class="pre">credit_card</span></code>, lo que sugiere que el propósito del préstamo podría ser un predictor relevante del riesgo de incumplimiento.</p>
+<p>En <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code>, también se observan diferencias claras. Categorías como <code class="docutils literal notranslate"><span class="pre">RENT</span></code> y <code class="docutils literal notranslate"><span class="pre">OTHER</span></code> muestran una mayor proporción de default en comparación con <code class="docutils literal notranslate"><span class="pre">OWN</span></code> y <code class="docutils literal notranslate"><span class="pre">MORTGAGE</span></code>, mientras que esta última presenta un comportamiento relativamente más estable.</p>
+<p>En <code class="docutils literal notranslate"><span class="pre">addr_state</span></code>, aunque las diferencias son más sutiles visualmente, se aprecia que algunos estados presentan una proporción de default mayor que otros, lo cual sugiere la existencia de variaciones regionales en el comportamiento de pago.</p>
+<p>En conjunto, las visualizaciones refuerzan la evidencia de que las variables categóricas seleccionadas presentan asociaciones con la variable objetivo y podrían aportar información útil en el modelado posterior.</p>
+</section>
+<section id="prueba-de-chi-cuadrado-para-variables-categoricas">
+<h3><strong>Prueba de chi-cuadrado para variables categóricas</strong><a class="headerlink" href="#prueba-de-chi-cuadrado-para-variables-categoricas" title="Permalink to this heading">#</a></h3>
+<p>Con el fin de evaluar formalmente la relación entre cada variable categórica y la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>, se aplica la prueba de chi-cuadrado de independencia.</p>
+<p>Esta prueba permite determinar si la distribución de default depende de la categoría analizada. Valores pequeños de <em>p-value</em> indican que existe evidencia estadística de asociación entre la variable categórica y la variable objetivo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2_contingency</span>
+
+<span class="n">chi2_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">:</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">col</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">contingency</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">temp</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">])</span>
+
+    <span class="n">chi2</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">expected</span> <span class="o">=</span> <span class="n">chi2_contingency</span><span class="p">(</span><span class="n">contingency</span><span class="p">)</span>
+
+    <span class="n">chi2_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span>
+        <span class="s2">&quot;chi2&quot;</span><span class="p">:</span> <span class="n">chi2</span><span class="p">,</span>
+        <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span>
+        <span class="s2">&quot;degrees_freedom&quot;</span><span class="p">:</span> <span class="n">dof</span>
+    <span class="p">})</span>
+
+<span class="n">chi2_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">chi2_results</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;p_value&quot;</span><span class="p">)</span>
+<span class="n">chi2_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>variable</th>
+      <th>chi2</th>
+      <th>p_value</th>
+      <th>degrees_freedom</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>purpose</td>
+      <td>5506.641353</td>
+      <td>0.000000e+00</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>home_ownership</td>
+      <td>6040.699202</td>
+      <td>0.000000e+00</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>addr_state</td>
+      <td>3226.072554</td>
+      <td>0.000000e+00</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>emp_length</td>
+      <td>657.343314</td>
+      <td>8.950601e-135</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="interpretacion-de-la-prueba-de-chi-cuadrado">
+<h3><strong>Interpretación de la prueba de chi-cuadrado</strong><a class="headerlink" href="#interpretacion-de-la-prueba-de-chi-cuadrado" title="Permalink to this heading">#</a></h3>
+<p>Los resultados de la prueba de chi-cuadrado muestran que todas las variables categóricas analizadas presentan asociación estadísticamente significativa con la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>, dado que en todos los casos los <em>p-values</em> son extremadamente pequeños.</p>
+<p>Entre las variables evaluadas, <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code> y <code class="docutils literal notranslate"><span class="pre">purpose</span></code> presentan los valores más altos del estadístico chi-cuadrado, lo que sugiere una asociación más marcada con el incumplimiento del préstamo dentro del conjunto analizado.</p>
+<p>La variable <code class="docutils literal notranslate"><span class="pre">addr_state</span></code> también presenta evidencia significativa de asociación con <code class="docutils literal notranslate"><span class="pre">default</span></code>, lo cual respalda la existencia de diferencias regionales en el comportamiento de pago. Por su parte, <code class="docutils literal notranslate"><span class="pre">emp_length</span></code>, aunque presenta un estadístico chi-cuadrado menor en comparación con las demás, también muestra una relación estadísticamente significativa con la variable objetivo.</p>
+<p>En conjunto, estos resultados confirman que las variables categóricas seleccionadas no son independientes de <code class="docutils literal notranslate"><span class="pre">default</span></code> y, por tanto, pueden aportar información relevante para el modelado predictivo.</p>
+<p>En consecuencia, tanto el análisis descriptivo como la prueba de chi-cuadrado sugieren que <code class="docutils literal notranslate"><span class="pre">purpose</span></code>, <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code>, <code class="docutils literal notranslate"><span class="pre">addr_state</span></code> y <code class="docutils literal notranslate"><span class="pre">emp_length</span></code> contienen señales útiles para distinguir entre préstamos en default y no default.</p>
+</section>
+</section>
+<section id="relacion-entre-variables-independientes">
+<h2><strong>Relación entre variables independientes</strong><a class="headerlink" href="#relacion-entre-variables-independientes" title="Permalink to this heading">#</a></h2>
+<p>Además de analizar la relación entre las variables y la variable objetivo, es importante estudiar la asociación entre variables independientes, con el fin de identificar posibles problemas de multicolinealidad o redundancia que puedan afectar el modelado posterior.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">num_vars</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">corr_matrix</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>loan_amnt</th>
+      <th>int_rate</th>
+      <th>annual_inc</th>
+      <th>dti</th>
+      <th>fico_range_high</th>
+      <th>revol_util</th>
+      <th>open_acc</th>
+      <th>total_acc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>loan_amnt</th>
+      <td>1.000000</td>
+      <td>0.098082</td>
+      <td>0.197246</td>
+      <td>0.043542</td>
+      <td>0.110584</td>
+      <td>0.099078</td>
+      <td>0.182229</td>
+      <td>0.199570</td>
+    </tr>
+    <tr>
+      <th>int_rate</th>
+      <td>0.098082</td>
+      <td>1.000000</td>
+      <td>-0.050583</td>
+      <td>0.124491</td>
+      <td>-0.415991</td>
+      <td>0.262670</td>
+      <td>-0.010472</td>
+      <td>-0.040951</td>
+    </tr>
+    <tr>
+      <th>annual_inc</th>
+      <td>0.197246</td>
+      <td>-0.050583</td>
+      <td>1.000000</td>
+      <td>-0.082619</td>
+      <td>0.037008</td>
+      <td>0.028207</td>
+      <td>0.094377</td>
+      <td>0.115271</td>
+    </tr>
+    <tr>
+      <th>dti</th>
+      <td>0.043542</td>
+      <td>0.124491</td>
+      <td>-0.082619</td>
+      <td>1.000000</td>
+      <td>-0.027931</td>
+      <td>0.115225</td>
+      <td>0.186124</td>
+      <td>0.147335</td>
+    </tr>
+    <tr>
+      <th>fico_range_high</th>
+      <td>0.110584</td>
+      <td>-0.415991</td>
+      <td>0.037008</td>
+      <td>-0.027931</td>
+      <td>1.000000</td>
+      <td>-0.476999</td>
+      <td>0.018405</td>
+      <td>0.016192</td>
+    </tr>
+    <tr>
+      <th>revol_util</th>
+      <td>0.099078</td>
+      <td>0.262670</td>
+      <td>0.028207</td>
+      <td>0.115225</td>
+      <td>-0.476999</td>
+      <td>1.000000</td>
+      <td>-0.134632</td>
+      <td>-0.093147</td>
+    </tr>
+    <tr>
+      <th>open_acc</th>
+      <td>0.182229</td>
+      <td>-0.010472</td>
+      <td>0.094377</td>
+      <td>0.186124</td>
+      <td>0.018405</td>
+      <td>-0.134632</td>
+      <td>1.000000</td>
+      <td>0.717911</td>
+    </tr>
+    <tr>
+      <th>total_acc</th>
+      <td>0.199570</td>
+      <td>-0.040951</td>
+      <td>0.115271</td>
+      <td>0.147335</td>
+      <td>0.016192</td>
+      <td>-0.093147</td>
+      <td>0.717911</td>
+      <td>1.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="interpretacion-de-la-matriz-de-correlacion">
+<h3><strong>Interpretación de la matriz de correlación</strong><a class="headerlink" href="#interpretacion-de-la-matriz-de-correlacion" title="Permalink to this heading">#</a></h3>
+<p>La matriz de correlación muestra que, en general, las variables numéricas seleccionadas no presentan niveles extremos de correlación lineal, lo que sugiere una ausencia de multicolinealidad severa dentro de este subconjunto.</p>
+<p>Sin embargo, se identifican algunos pares con asociaciones relativamente más altas:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">open_acc</span></code> y <code class="docutils literal notranslate"><span class="pre">total_acc</span></code> presentan una correlación positiva de aproximadamente <strong>0.718</strong>, lo cual supera el umbral de 0.7 y sugiere una posible redundancia parcial, dado que ambas variables reflejan aspectos relacionados con el número de cuentas de crédito.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> y <code class="docutils literal notranslate"><span class="pre">revol_util</span></code> muestran una correlación negativa moderada de aproximadamente <strong>-0.477</strong>, lo que indica que mayores niveles de utilización del crédito tienden a asociarse con menores puntajes crediticios.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int_rate</span></code> y <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> presentan una correlación negativa moderada de aproximadamente <strong>-0.416</strong>, consistente con la lógica financiera según la cual perfiles crediticios más sólidos suelen recibir tasas de interés menores.</p></li>
+</ul>
+<p>Fuera de estos casos, la mayoría de las correlaciones se mantienen en magnitudes bajas o moderadas, lo cual sugiere que las variables capturan dimensiones diferentes del perfil financiero del solicitante.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corr_matrix</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;.2f&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;coolwarm&quot;</span><span class="p">,</span> <span class="n">square</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Matriz de correlación entre variables numéricas&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b846255c281da63e35cac38e7cc01c6bb0ed07cbdbfa3151882af06a5056ed56.png" src="_images/b846255c281da63e35cac38e7cc01c6bb0ed07cbdbfa3151882af06a5056ed56.png" />
+</div>
+</div>
+<section id="pares-de-variables-con-mayor-correlacion">
+<h4><strong>Pares de variables con mayor correlación</strong><a class="headerlink" href="#pares-de-variables-con-mayor-correlacion" title="Permalink to this heading">#</a></h4>
+<p>El análisis de pares confirma que la correlación más alta dentro del conjunto seleccionado corresponde a <code class="docutils literal notranslate"><span class="pre">open_acc</span></code> y <code class="docutils literal notranslate"><span class="pre">total_acc</span></code>, con un valor de aproximadamente <strong>0.718</strong>, lo cual supera el umbral de 0.7 y sugiere una posible redundancia parcial entre ambas variables. Esto es consistente con el hecho de que ambas describen dimensiones relacionadas con la cantidad de cuentas de crédito del solicitante.</p>
+<p>También se observan correlaciones negativas moderadas entre <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> y <code class="docutils literal notranslate"><span class="pre">revol_util</span></code> (<strong>-0.477</strong>), así como entre <code class="docutils literal notranslate"><span class="pre">int_rate</span></code> y <code class="docutils literal notranslate"><span class="pre">fico_range_high</span></code> (<strong>-0.416</strong>). Estas relaciones son coherentes con la lógica del riesgo crediticio: mayores niveles de utilización del crédito y mayores tasas de interés tienden a asociarse con perfiles crediticios menos favorables.</p>
+<p>Fuera de estos casos, las correlaciones restantes presentan magnitudes bajas o moderadas, lo cual indica que la mayoría de las variables seleccionadas aporta información complementaria en lugar de altamente redundante.</p>
+<p>En consecuencia, no se observa un problema severo de multicolinealidad en el subconjunto analizado, aunque el par <code class="docutils literal notranslate"><span class="pre">open_acc</span></code>–<code class="docutils literal notranslate"><span class="pre">total_acc</span></code> deberá considerarse con atención en la etapa de modelado.</p>
+</section>
+</section>
+</section>
+<section id="asociacion-entre-variables-categoricas">
+<h2><strong>Asociación entre variables categóricas</strong><a class="headerlink" href="#asociacion-entre-variables-categoricas" title="Permalink to this heading">#</a></h2>
+<p>Además de la relación entre las variables categóricas y la variable objetivo, se analiza la asociación entre pares de variables categóricas con el fin de detectar posibles redundancias o dependencias entre ellas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">chi2_contingency</span>
+
+<span class="n">cat_assoc_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cat_vars</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cat_vars</span><span class="p">)):</span>
+        <span class="n">var1</span> <span class="o">=</span> <span class="n">cat_vars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">var2</span> <span class="o">=</span> <span class="n">cat_vars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">var1</span><span class="p">,</span> <span class="n">var2</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="n">contingency</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">var1</span><span class="p">],</span> <span class="n">temp</span><span class="p">[</span><span class="n">var2</span><span class="p">])</span>
+
+        <span class="n">chi2</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">dof</span><span class="p">,</span> <span class="n">expected</span> <span class="o">=</span> <span class="n">chi2_contingency</span><span class="p">(</span><span class="n">contingency</span><span class="p">)</span>
+
+        <span class="n">cat_assoc_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;var1&quot;</span><span class="p">:</span> <span class="n">var1</span><span class="p">,</span>
+            <span class="s2">&quot;var2&quot;</span><span class="p">:</span> <span class="n">var2</span><span class="p">,</span>
+            <span class="s2">&quot;chi2&quot;</span><span class="p">:</span> <span class="n">chi2</span><span class="p">,</span>
+            <span class="s2">&quot;p_value&quot;</span><span class="p">:</span> <span class="n">p</span><span class="p">,</span>
+            <span class="s2">&quot;degrees_freedom&quot;</span><span class="p">:</span> <span class="n">dof</span>
+        <span class="p">})</span>
+
+<span class="n">cat_assoc_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cat_assoc_results</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;p_value&quot;</span><span class="p">)</span>
+<span class="n">cat_assoc_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>var1</th>
+      <th>var2</th>
+      <th>chi2</th>
+      <th>p_value</th>
+      <th>degrees_freedom</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>emp_length</td>
+      <td>purpose</td>
+      <td>11355.661959</td>
+      <td>0.0</td>
+      <td>130</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>emp_length</td>
+      <td>home_ownership</td>
+      <td>86921.991876</td>
+      <td>0.0</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>emp_length</td>
+      <td>addr_state</td>
+      <td>8684.767641</td>
+      <td>0.0</td>
+      <td>500</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>purpose</td>
+      <td>home_ownership</td>
+      <td>84785.168976</td>
+      <td>0.0</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>purpose</td>
+      <td>addr_state</td>
+      <td>12667.000251</td>
+      <td>0.0</td>
+      <td>650</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>home_ownership</td>
+      <td>addr_state</td>
+      <td>144596.073997</td>
+      <td>0.0</td>
+      <td>250</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="interpretacion-de-la-asociacion-entre-variables-categoricas">
+<h3><strong>Interpretación de la asociación entre variables categóricas</strong><a class="headerlink" href="#interpretacion-de-la-asociacion-entre-variables-categoricas" title="Permalink to this heading">#</a></h3>
+<p>Los resultados muestran que todos los pares de variables categóricas analizados presentan asociación estadísticamente significativa, dado que en todos los casos el <em>p-value</em> es prácticamente cero.</p>
+<p>Esto indica que las variables categóricas seleccionadas no son independientes entre sí y que existe cierto grado de relación estructural entre distintas características del solicitante y del préstamo.</p>
+<p>En particular, las asociaciones más fuertes se observan entre <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code> y <code class="docutils literal notranslate"><span class="pre">addr_state</span></code>, así como entre <code class="docutils literal notranslate"><span class="pre">emp_length</span></code> y <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code>, y entre <code class="docutils literal notranslate"><span class="pre">purpose</span></code> y <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code>. Estos resultados sugieren que algunas de estas variables podrían capturar información parcialmente relacionada, por ejemplo, diferencias regionales en la tenencia de vivienda o patrones de empleo y propósito del préstamo según el perfil del solicitante.</p>
+<p>No obstante, el hecho de que exista asociación estadística no implica necesariamente una redundancia completa. En este contexto, estos resultados deben interpretarse como evidencia de dependencia entre variables categóricas, lo cual será útil para considerar posibles solapamientos de información en la etapa de modelado.</p>
+<p>En conjunto, este análisis sugiere que las variables categóricas seleccionadas contienen relaciones entre sí, aunque aún pueden aportar información complementaria para la predicción del default.</p>
+</section>
+</section>
+<section id="visualizaciones-avanzadas-sugeridas">
+<h2><strong>Visualizaciones avanzadas sugeridas</strong><a class="headerlink" href="#visualizaciones-avanzadas-sugeridas" title="Permalink to this heading">#</a></h2>
+<p>Dado el tamaño del dataset, las visualizaciones avanzadas se realizarán sobre una muestra representativa únicamente con fines exploratorios y de interpretación gráfica.</p>
+<p>Esto no afecta el modelado posterior, que seguirá realizándose sobre el conjunto completo de datos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_pairplot</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">num_vars</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span>
+    <span class="n">sample_pairplot</span><span class="p">,</span>
+    <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loan_amnt&quot;</span><span class="p">,</span> <span class="s2">&quot;int_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;annual_inc&quot;</span><span class="p">,</span> <span class="s2">&quot;dti&quot;</span><span class="p">],</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">corner</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">plot_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;alpha&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\Daniel Rangel\miniconda3\envs\ml_rangel\lib\site-packages\seaborn\axisgrid.py:118: UserWarning: The figure layout has changed to tight
+  self._figure.tight_layout(*args, **kwargs)
+</pre></div>
+</div>
+<img alt="_images/e4cfd242ea2998c820883c86b7591eeb67873d22b2f8a12fc137f8e8e088c278.png" src="_images/e4cfd242ea2998c820883c86b7591eeb67873d22b2f8a12fc137f8e8e088c278.png" />
+</div>
+</div>
+<section id="interpretacion-del-pairplot">
+<h3><strong>Interpretación del pairplot</strong><a class="headerlink" href="#interpretacion-del-pairplot" title="Permalink to this heading">#</a></h3>
+<p>El pairplot permite visualizar de manera conjunta la distribución de varias variables numéricas y su relación con la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<p>En la diagonal se observa la distribución individual de cada variable, mientras que fuera de la diagonal se representan relaciones bivariadas entre pares de variables.</p>
+<p>En general, se aprecia una superposición importante entre las clases <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">0</span></code> y <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>, lo que sugiere que no existe una separación perfectamente definida entre ambas clases a partir de estas variables de forma individual. No obstante, sí se observan algunas diferencias en variables como <code class="docutils literal notranslate"><span class="pre">int_rate</span></code>, donde los casos de default tienden a concentrarse en valores relativamente más altos.</p>
+<p>Este resultado es consistente con problemas reales de clasificación crediticia, en los que la separación entre clases suele depender de la combinación de varias variables más que de una única característica aislada.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_edacat.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_eda_resumen.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Resumen Ejecutivo Del EDA</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-entre-variables-numericas-y-la-variable-objetivo"><strong>Relación entre variables numéricas y la variable objetivo</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#diferencia-de-medias-prueba-de-mann-whitney-y-correlacion-punto-biserial"><strong>Diferencia de medias, prueba de Mann-Whitney y correlación punto-biserial</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-entre-variables-categoricas-y-la-variable-objetivo"><strong>Relación entre variables categóricas y la variable objetivo</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-las-tablas-de-contingencia">Interpretación de las tablas de contingencia</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-los-graficos-de-barras-apiladas"><strong>Interpretación de los gráficos de barras apiladas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-chi-cuadrado-para-variables-categoricas"><strong>Prueba de chi-cuadrado para variables categóricas</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-prueba-de-chi-cuadrado"><strong>Interpretación de la prueba de chi-cuadrado</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#relacion-entre-variables-independientes"><strong>Relación entre variables independientes</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-matriz-de-correlacion"><strong>Interpretación de la matriz de correlación</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pares-de-variables-con-mayor-correlacion"><strong>Pares de variables con mayor correlación</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#asociacion-entre-variables-categoricas"><strong>Asociación entre variables categóricas</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-asociacion-entre-variables-categoricas"><strong>Interpretación de la asociación entre variables categóricas</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizaciones-avanzadas-sugeridas"><strong>Visualizaciones avanzadas sugeridas</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-pairplot"><strong>Interpretación del pairplot</strong></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Camargo, Meza, Rangel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

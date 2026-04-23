@@ -1,0 +1,1549 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Análisis Exploratorio de Datos (EDA) - Categóricas y Target &#8212; Proyecto Integrador ML</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '03_edacat';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional" href="04_eda_bidimensional.html" />
+    <link rel="prev" title="Análisis Exploratorio de Datos (EDA) - Numéricas" href="02_eda.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="ProyectoIntegrador.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Proyecto Integrador ML</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="ProyectoIntegrador.html">
+                    Proyecto Integrador de Aprendizaje Automático
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_dataset_target.html">Dataset y Variable Objetivo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_eda.html"><strong>Análisis Exploratorio de Datos (EDA) - Numéricas</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_eda_bidimensional.html"><strong>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_lime_interpretabilidad.html"><strong>Interpretabilidad con LIME</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/03_edacat.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacion-de-variables-categoricas"><strong>Identificación de variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes-en-variables-categoricas"><strong>Valores faltantes en variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-de-variables-categoricas-para-el-analisis"><strong>Selección de variables categóricas para el análisis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#categorias-con-baja-frecuencia"><strong>Categorías con baja frecuencia</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-de-variables-categoricas"><strong>Visualización de variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-la-variable-objetivo"><strong>Análisis de la variable objetivo</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-de-la-seccion"><strong>Conclusión de la sección</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="analisis-exploratorio-de-datos-eda-categoricas-y-target">
+<h1><strong>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</strong><a class="headerlink" href="#analisis-exploratorio-de-datos-eda-categoricas-y-target" title="Permalink to this heading">#</a></h1>
+<p>En esta sección se realiza el análisis unidimensional de las variables categóricas del dataset y de la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>.</p>
+<p>El propósito es examinar la distribución de las categorías, identificar posibles problemas de calidad de datos, detectar categorías poco frecuentes y analizar el desbalance de clases en la variable objetivo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+
+<span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\Daniel Rangel\Documents\MachineLearning\Data\accepted_2007_to_2018Q4.csv.gz&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;loan_status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;Charged Off&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="identificacion-de-variables-categoricas">
+<h2><strong>Identificación de variables categóricas</strong><a class="headerlink" href="#identificacion-de-variables-categoricas" title="Permalink to this heading">#</a></h2>
+<p>En primer lugar, se identifican las variables categóricas presentes en el dataset para posteriormente evaluar su nivel de completitud y seleccionar aquellas más relevantes para el análisis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">categorical_cols</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de variables categóricas:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">categorical_cols</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Número de variables categóricas: 38
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="valores-faltantes-en-variables-categoricas">
+<h2><strong>Valores faltantes en variables categóricas</strong><a class="headerlink" href="#valores-faltantes-en-variables-categoricas" title="Permalink to this heading">#</a></h2>
+<p>Se calcula la cantidad y el porcentaje de valores faltantes por variable categórica, con el fin de identificar aquellas que presentan un nivel de completitud adecuado para su análisis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missing_cat</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">categorical_cols</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">missing_pct_cat</span> <span class="o">=</span> <span class="p">(</span><span class="n">missing_cat</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="n">missing_cat_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;missing&quot;</span><span class="p">:</span> <span class="n">missing_cat</span><span class="p">,</span>
+    <span class="s2">&quot;percentage&quot;</span><span class="p">:</span> <span class="n">missing_pct_cat</span>
+<span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;percentage&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">missing_cat_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>missing</th>
+      <th>percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>hardship_end_date</th>
+      <td>2249784</td>
+      <td>99.517097</td>
+    </tr>
+    <tr>
+      <th>payment_plan_start_date</th>
+      <td>2249784</td>
+      <td>99.517097</td>
+    </tr>
+    <tr>
+      <th>hardship_type</th>
+      <td>2249784</td>
+      <td>99.517097</td>
+    </tr>
+    <tr>
+      <th>hardship_reason</th>
+      <td>2249784</td>
+      <td>99.517097</td>
+    </tr>
+    <tr>
+      <th>hardship_status</th>
+      <td>2249784</td>
+      <td>99.517097</td>
+    </tr>
+    <tr>
+      <th>hardship_start_date</th>
+      <td>2249784</td>
+      <td>99.517097</td>
+    </tr>
+    <tr>
+      <th>hardship_loan_status</th>
+      <td>2249784</td>
+      <td>99.517097</td>
+    </tr>
+    <tr>
+      <th>settlement_date</th>
+      <td>2226455</td>
+      <td>98.485160</td>
+    </tr>
+    <tr>
+      <th>debt_settlement_flag_date</th>
+      <td>2226455</td>
+      <td>98.485160</td>
+    </tr>
+    <tr>
+      <th>settlement_status</th>
+      <td>2226455</td>
+      <td>98.485160</td>
+    </tr>
+    <tr>
+      <th>sec_app_earliest_cr_line</th>
+      <td>2152680</td>
+      <td>95.221792</td>
+    </tr>
+    <tr>
+      <th>verification_status_joint</th>
+      <td>2144971</td>
+      <td>94.880791</td>
+    </tr>
+    <tr>
+      <th>desc</th>
+      <td>2134634</td>
+      <td>94.423544</td>
+    </tr>
+    <tr>
+      <th>next_pymnt_d</th>
+      <td>1345343</td>
+      <td>59.509993</td>
+    </tr>
+    <tr>
+      <th>emp_title</th>
+      <td>167002</td>
+      <td>7.387178</td>
+    </tr>
+    <tr>
+      <th>emp_length</th>
+      <td>146940</td>
+      <td>6.499754</td>
+    </tr>
+    <tr>
+      <th>title</th>
+      <td>23358</td>
+      <td>1.033219</td>
+    </tr>
+    <tr>
+      <th>last_pymnt_d</th>
+      <td>2460</td>
+      <td>0.108816</td>
+    </tr>
+    <tr>
+      <th>last_credit_pull_d</th>
+      <td>105</td>
+      <td>0.004645</td>
+    </tr>
+    <tr>
+      <th>earliest_cr_line</th>
+      <td>62</td>
+      <td>0.002743</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Con base en el análisis de valores faltantes, se utilizará un umbral preliminar del 30% para identificar variables categóricas con un nivel de completitud adecuado.</p>
+<p>Este criterio no implica una eliminación automática, sino que funciona como filtro inicial para seleccionar variables candidatas al análisis detallado.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">threshold</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">cat_cols_under_threshold</span> <span class="o">=</span> <span class="n">missing_cat_df</span><span class="p">[</span>
+    <span class="n">missing_cat_df</span><span class="p">[</span><span class="s2">&quot;percentage&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">threshold</span>
+<span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de variables categóricas con &lt;= 30</span><span class="si">% d</span><span class="s2">e missing:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cat_cols_under_threshold</span><span class="p">))</span>
+<span class="n">cat_cols_under_threshold</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Número de variables categóricas con &lt;= 30% de missing: 24
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;emp_title&#39;,
+ &#39;emp_length&#39;,
+ &#39;title&#39;,
+ &#39;last_pymnt_d&#39;,
+ &#39;last_credit_pull_d&#39;,
+ &#39;earliest_cr_line&#39;,
+ &#39;zip_code&#39;,
+ &#39;initial_list_status&#39;,
+ &#39;issue_d&#39;,
+ &#39;grade&#39;,
+ &#39;sub_grade&#39;,
+ &#39;debt_settlement_flag&#39;,
+ &#39;disbursement_method&#39;,
+ &#39;home_ownership&#39;,
+ &#39;verification_status&#39;,
+ &#39;pymnt_plan&#39;,
+ &#39;loan_status&#39;,
+ &#39;term&#39;,
+ &#39;url&#39;,
+ &#39;purpose&#39;,
+ &#39;hardship_flag&#39;,
+ &#39;addr_state&#39;,
+ &#39;application_type&#39;,
+ &#39;id&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="seleccion-de-variables-categoricas-para-el-analisis">
+<h2><strong>Selección de variables categóricas para el análisis</strong><a class="headerlink" href="#seleccion-de-variables-categoricas-para-el-analisis" title="Permalink to this heading">#</a></h2>
+<p>A partir del conjunto de variables categóricas que cumplen con el criterio de tener un porcentaje de valores faltantes menor o igual al 30%, se selecciona un subconjunto de variables relevantes para el análisis exploratorio detallado.</p>
+<p>La selección se realiza considerando dos criterios principales:</p>
+<ul class="simple">
+<li><p>su relevancia para el problema de predicción de default,</p></li>
+<li><p>y su alineación con las variables que serán utilizadas posteriormente en el modelado.</p></li>
+</ul>
+<p>En particular, se trabajará con las variables <code class="docutils literal notranslate"><span class="pre">emp_length</span></code>, <code class="docutils literal notranslate"><span class="pre">purpose</span></code>, <code class="docutils literal notranslate"><span class="pre">home_ownership</span></code> y <code class="docutils literal notranslate"><span class="pre">addr_state</span></code>, ya que representan características importantes del perfil del solicitante y del préstamo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cat_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;emp_length&quot;</span><span class="p">,</span> <span class="s2">&quot;purpose&quot;</span><span class="p">,</span> <span class="s2">&quot;home_ownership&quot;</span><span class="p">,</span> <span class="s2">&quot;addr_state&quot;</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables categóricas seleccionadas:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cat_vars</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variables categóricas seleccionadas:
+[&#39;emp_length&#39;, &#39;purpose&#39;, &#39;home_ownership&#39;, &#39;addr_state&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">missing_selected_cat</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cat_vars</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="n">missing_pct_selected_cat</span> <span class="o">=</span> <span class="p">(</span><span class="n">missing_selected_cat</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="n">missing_selected_cat_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;missing&quot;</span><span class="p">:</span> <span class="n">missing_selected_cat</span><span class="p">,</span>
+    <span class="s2">&quot;percentage&quot;</span><span class="p">:</span> <span class="n">missing_pct_selected_cat</span>
+<span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;percentage&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">missing_selected_cat_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>missing</th>
+      <th>percentage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>emp_length</th>
+      <td>146940</td>
+      <td>6.499754</td>
+    </tr>
+    <tr>
+      <th>purpose</th>
+      <td>33</td>
+      <td>0.001460</td>
+    </tr>
+    <tr>
+      <th>home_ownership</th>
+      <td>33</td>
+      <td>0.001460</td>
+    </tr>
+    <tr>
+      <th>addr_state</th>
+      <td>33</td>
+      <td>0.001460</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Las variables categóricas seleccionadas presentan porcentajes de valores faltantes iguales o inferiores al 30%, por lo que se consideran adecuadas para el análisis exploratorio.</p>
+<p>En etapas posteriores de preprocesamiento, los valores faltantes podrán tratarse mediante imputación por moda, creación de una categoría específica como “Desconocido” o, en casos particulares, mediante eliminación si el contexto lo justifica.</p>
+<p>A continuación se presentan los valores y sus frecuencias en número y porcentaje para cada variable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">:</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">rel</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">freq_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;frecuencia&quot;</span><span class="p">:</span> <span class="n">freq</span><span class="p">,</span>
+        <span class="s2">&quot;porcentaje&quot;</span><span class="p">:</span> <span class="n">rel</span>
+    <span class="p">})</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Variable: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">freq_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: emp_length
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>frecuencia</th>
+      <th>porcentaje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>10+ years</th>
+      <td>748005</td>
+      <td>33.09</td>
+    </tr>
+    <tr>
+      <th>2 years</th>
+      <td>203677</td>
+      <td>9.01</td>
+    </tr>
+    <tr>
+      <th>&lt; 1 year</th>
+      <td>189988</td>
+      <td>8.40</td>
+    </tr>
+    <tr>
+      <th>3 years</th>
+      <td>180753</td>
+      <td>8.00</td>
+    </tr>
+    <tr>
+      <th>1 year</th>
+      <td>148403</td>
+      <td>6.56</td>
+    </tr>
+    <tr>
+      <th>NaN</th>
+      <td>146940</td>
+      <td>6.50</td>
+    </tr>
+    <tr>
+      <th>5 years</th>
+      <td>139698</td>
+      <td>6.18</td>
+    </tr>
+    <tr>
+      <th>4 years</th>
+      <td>136605</td>
+      <td>6.04</td>
+    </tr>
+    <tr>
+      <th>6 years</th>
+      <td>102628</td>
+      <td>4.54</td>
+    </tr>
+    <tr>
+      <th>7 years</th>
+      <td>92695</td>
+      <td>4.10</td>
+    </tr>
+    <tr>
+      <th>8 years</th>
+      <td>91914</td>
+      <td>4.07</td>
+    </tr>
+    <tr>
+      <th>9 years</th>
+      <td>79395</td>
+      <td>3.51</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: purpose
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>frecuencia</th>
+      <th>porcentaje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>debt_consolidation</th>
+      <td>1277877</td>
+      <td>56.53</td>
+    </tr>
+    <tr>
+      <th>credit_card</th>
+      <td>516971</td>
+      <td>22.87</td>
+    </tr>
+    <tr>
+      <th>home_improvement</th>
+      <td>150457</td>
+      <td>6.66</td>
+    </tr>
+    <tr>
+      <th>other</th>
+      <td>139440</td>
+      <td>6.17</td>
+    </tr>
+    <tr>
+      <th>major_purchase</th>
+      <td>50445</td>
+      <td>2.23</td>
+    </tr>
+    <tr>
+      <th>medical</th>
+      <td>27488</td>
+      <td>1.22</td>
+    </tr>
+    <tr>
+      <th>small_business</th>
+      <td>24689</td>
+      <td>1.09</td>
+    </tr>
+    <tr>
+      <th>car</th>
+      <td>24013</td>
+      <td>1.06</td>
+    </tr>
+    <tr>
+      <th>vacation</th>
+      <td>15525</td>
+      <td>0.69</td>
+    </tr>
+    <tr>
+      <th>moving</th>
+      <td>15403</td>
+      <td>0.68</td>
+    </tr>
+    <tr>
+      <th>house</th>
+      <td>14136</td>
+      <td>0.63</td>
+    </tr>
+    <tr>
+      <th>wedding</th>
+      <td>2355</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <th>renewable_energy</th>
+      <td>1445</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <th>educational</th>
+      <td>424</td>
+      <td>0.02</td>
+    </tr>
+    <tr>
+      <th>NaN</th>
+      <td>33</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: home_ownership
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>frecuencia</th>
+      <th>porcentaje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>MORTGAGE</th>
+      <td>1111450</td>
+      <td>49.16</td>
+    </tr>
+    <tr>
+      <th>RENT</th>
+      <td>894929</td>
+      <td>39.59</td>
+    </tr>
+    <tr>
+      <th>OWN</th>
+      <td>253057</td>
+      <td>11.19</td>
+    </tr>
+    <tr>
+      <th>ANY</th>
+      <td>996</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <th>OTHER</th>
+      <td>182</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <th>NONE</th>
+      <td>54</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>NaN</th>
+      <td>33</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: addr_state
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>frecuencia</th>
+      <th>porcentaje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>CA</th>
+      <td>314533</td>
+      <td>13.91</td>
+    </tr>
+    <tr>
+      <th>NY</th>
+      <td>186389</td>
+      <td>8.24</td>
+    </tr>
+    <tr>
+      <th>TX</th>
+      <td>186335</td>
+      <td>8.24</td>
+    </tr>
+    <tr>
+      <th>FL</th>
+      <td>161991</td>
+      <td>7.17</td>
+    </tr>
+    <tr>
+      <th>IL</th>
+      <td>91173</td>
+      <td>4.03</td>
+    </tr>
+    <tr>
+      <th>NJ</th>
+      <td>83132</td>
+      <td>3.68</td>
+    </tr>
+    <tr>
+      <th>PA</th>
+      <td>76939</td>
+      <td>3.40</td>
+    </tr>
+    <tr>
+      <th>OH</th>
+      <td>75132</td>
+      <td>3.32</td>
+    </tr>
+    <tr>
+      <th>GA</th>
+      <td>74196</td>
+      <td>3.28</td>
+    </tr>
+    <tr>
+      <th>VA</th>
+      <td>62954</td>
+      <td>2.78</td>
+    </tr>
+    <tr>
+      <th>NC</th>
+      <td>62730</td>
+      <td>2.77</td>
+    </tr>
+    <tr>
+      <th>MI</th>
+      <td>58770</td>
+      <td>2.60</td>
+    </tr>
+    <tr>
+      <th>MD</th>
+      <td>54008</td>
+      <td>2.39</td>
+    </tr>
+    <tr>
+      <th>AZ</th>
+      <td>53777</td>
+      <td>2.38</td>
+    </tr>
+    <tr>
+      <th>MA</th>
+      <td>51784</td>
+      <td>2.29</td>
+    </tr>
+    <tr>
+      <th>CO</th>
+      <td>48183</td>
+      <td>2.13</td>
+    </tr>
+    <tr>
+      <th>WA</th>
+      <td>47060</td>
+      <td>2.08</td>
+    </tr>
+    <tr>
+      <th>MN</th>
+      <td>39517</td>
+      <td>1.75</td>
+    </tr>
+    <tr>
+      <th>IN</th>
+      <td>37515</td>
+      <td>1.66</td>
+    </tr>
+    <tr>
+      <th>MO</th>
+      <td>36084</td>
+      <td>1.60</td>
+    </tr>
+    <tr>
+      <th>CT</th>
+      <td>35785</td>
+      <td>1.58</td>
+    </tr>
+    <tr>
+      <th>TN</th>
+      <td>35483</td>
+      <td>1.57</td>
+    </tr>
+    <tr>
+      <th>NV</th>
+      <td>32657</td>
+      <td>1.44</td>
+    </tr>
+    <tr>
+      <th>WI</th>
+      <td>29877</td>
+      <td>1.32</td>
+    </tr>
+    <tr>
+      <th>SC</th>
+      <td>28003</td>
+      <td>1.24</td>
+    </tr>
+    <tr>
+      <th>AL</th>
+      <td>27284</td>
+      <td>1.21</td>
+    </tr>
+    <tr>
+      <th>OR</th>
+      <td>26789</td>
+      <td>1.18</td>
+    </tr>
+    <tr>
+      <th>LA</th>
+      <td>25759</td>
+      <td>1.14</td>
+    </tr>
+    <tr>
+      <th>KY</th>
+      <td>21887</td>
+      <td>0.97</td>
+    </tr>
+    <tr>
+      <th>OK</th>
+      <td>20691</td>
+      <td>0.92</td>
+    </tr>
+    <tr>
+      <th>KS</th>
+      <td>19109</td>
+      <td>0.85</td>
+    </tr>
+    <tr>
+      <th>AR</th>
+      <td>17074</td>
+      <td>0.76</td>
+    </tr>
+    <tr>
+      <th>UT</th>
+      <td>14993</td>
+      <td>0.66</td>
+    </tr>
+    <tr>
+      <th>MS</th>
+      <td>12639</td>
+      <td>0.56</td>
+    </tr>
+    <tr>
+      <th>NM</th>
+      <td>11986</td>
+      <td>0.53</td>
+    </tr>
+    <tr>
+      <th>NH</th>
+      <td>11142</td>
+      <td>0.49</td>
+    </tr>
+    <tr>
+      <th>HI</th>
+      <td>10668</td>
+      <td>0.47</td>
+    </tr>
+    <tr>
+      <th>RI</th>
+      <td>10005</td>
+      <td>0.44</td>
+    </tr>
+    <tr>
+      <th>WV</th>
+      <td>8351</td>
+      <td>0.37</td>
+    </tr>
+    <tr>
+      <th>NE</th>
+      <td>7819</td>
+      <td>0.35</td>
+    </tr>
+    <tr>
+      <th>DE</th>
+      <td>6458</td>
+      <td>0.29</td>
+    </tr>
+    <tr>
+      <th>MT</th>
+      <td>6299</td>
+      <td>0.28</td>
+    </tr>
+    <tr>
+      <th>DC</th>
+      <td>5356</td>
+      <td>0.24</td>
+    </tr>
+    <tr>
+      <th>AK</th>
+      <td>5231</td>
+      <td>0.23</td>
+    </tr>
+    <tr>
+      <th>ME</th>
+      <td>4974</td>
+      <td>0.22</td>
+    </tr>
+    <tr>
+      <th>VT</th>
+      <td>4937</td>
+      <td>0.22</td>
+    </tr>
+    <tr>
+      <th>WY</th>
+      <td>4748</td>
+      <td>0.21</td>
+    </tr>
+    <tr>
+      <th>SD</th>
+      <td>4549</td>
+      <td>0.20</td>
+    </tr>
+    <tr>
+      <th>ID</th>
+      <td>4308</td>
+      <td>0.19</td>
+    </tr>
+    <tr>
+      <th>ND</th>
+      <td>3591</td>
+      <td>0.16</td>
+    </tr>
+    <tr>
+      <th>NaN</th>
+      <td>33</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>IA</th>
+      <td>14</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="categorias-con-baja-frecuencia">
+<h2><strong>Categorías con baja frecuencia</strong><a class="headerlink" href="#categorias-con-baja-frecuencia" title="Permalink to this heading">#</a></h2>
+<p>Se identifican las categorías con una frecuencia relativa inferior al 1%, ya que estas podrían agruparse posteriormente en una categoría como “Otros” en la etapa de preprocesamiento.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rare_categories</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cat_vars</span><span class="p">:</span>
+    <span class="n">pct</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="n">rare_categories</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pct</span><span class="p">[</span><span class="n">pct</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">rare</span> <span class="ow">in</span> <span class="n">rare_categories</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Variable: </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rare</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No hay categorías con frecuencia menor al 1%&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">rare</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Variable: emp_length
+No hay categorías con frecuencia menor al 1%
+
+Variable: purpose
+NaN                 0.001460
+educational         0.018755
+renewable_energy    0.063918
+wedding             0.104171
+house               0.625293
+moving              0.681337
+vacation            0.686734
+Name: purpose, dtype: float64
+
+Variable: home_ownership
+NaN      0.001460
+NONE     0.002389
+OTHER    0.008051
+ANY      0.044057
+Name: home_ownership, dtype: float64
+
+Variable: addr_state
+IA     0.000619
+NaN    0.001460
+ND     0.158845
+ID     0.190560
+SD     0.201221
+WY     0.210023
+VT     0.218384
+ME     0.220020
+AK     0.231388
+DC     0.236918
+MT     0.278630
+DE     0.285664
+NE     0.345866
+WV     0.369399
+RI     0.442562
+HI     0.471889
+NH     0.492856
+NM     0.530190
+MS     0.559074
+UT     0.663201
+AR     0.755252
+KS     0.845269
+OK     0.915247
+KY     0.968151
+Name: addr_state, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualizacion-de-variables-categoricas">
+<h2><strong>Visualización de variables categóricas</strong><a class="headerlink" href="#visualizacion-de-variables-categoricas" title="Permalink to this heading">#</a></h2>
+<p>Se generan gráficos de barras para visualizar la distribución de las variables categóricas seleccionadas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">main_cat_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;emp_length&quot;</span><span class="p">,</span> <span class="s2">&quot;purpose&quot;</span><span class="p">,</span> <span class="s2">&quot;home_ownership&quot;</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">main_cat_vars</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">2.8</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">main_cat_vars</span><span class="p">)),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">main_cat_vars</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">axes</span> <span class="o">=</span> <span class="p">[</span><span class="n">axes</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">main_cat_vars</span><span class="p">):</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Frecuencia&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/66fd9207549360612d3d0d54cd09b7944090eb12dd0c28a54bd2be21f02f0059.png" src="_images/66fd9207549360612d3d0d54cd09b7944090eb12dd0c28a54bd2be21f02f0059.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">top_states</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;addr_state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;addr_state&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">top_states</span><span class="p">)],</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;addr_state&quot;</span><span class="p">,</span>
+    <span class="n">order</span><span class="o">=</span><span class="n">top_states</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;addr_state (Top 15 categorías)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Frecuencia&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/175381d055cf5b81f0bc131e9b7930328d6bd6fdcce2436179102762e2982a53.png" src="_images/175381d055cf5b81f0bc131e9b7930328d6bd6fdcce2436179102762e2982a53.png" />
+</div>
+</div>
+</section>
+<section id="analisis-de-la-variable-objetivo">
+<h2><strong>Análisis de la variable objetivo</strong><a class="headerlink" href="#analisis-de-la-variable-objetivo" title="Permalink to this heading">#</a></h2>
+<p>Finalmente, se analiza la distribución de la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>, construida a partir de la columna <code class="docutils literal notranslate"><span class="pre">loan_status</span></code>.</p>
+<p>El objetivo de esta subsección es evaluar la proporción de clases en el dataset y determinar si existe desbalance entre los casos de incumplimiento y no incumplimiento, ya que este aspecto puede influir de manera importante en el desempeño de los modelos de clasificación.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">default_counts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="n">default_pct</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">default_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;frecuencia&quot;</span><span class="p">:</span> <span class="n">default_counts</span><span class="p">,</span>
+    <span class="s2">&quot;porcentaje&quot;</span><span class="p">:</span> <span class="n">default_pct</span>
+<span class="p">})</span>
+
+<span class="n">default_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>frecuencia</th>
+      <th>porcentaje</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1992142</td>
+      <td>88.12</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>268559</td>
+      <td>11.88</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>La distribución de la variable objetivo muestra un claro desbalance de clases.</p>
+<p>En particular, el <strong>88.12%</strong> de los registros corresponde a la clase <strong>0</strong> (préstamos que no fueron clasificados como <code class="docutils literal notranslate"><span class="pre">Charged</span> <span class="pre">Off</span></code>), mientras que solo el <strong>11.88%</strong> corresponde a la clase <strong>1</strong> (préstamos en default).</p>
+<p>Este comportamiento indica que el dataset está desbalanceado hacia la clase mayoritaria, lo cual es habitual en problemas de riesgo crediticio, donde los casos de incumplimiento representan una proporción menor del total de préstamos.</p>
+<p>Desde el punto de vista del modelado, este desbalance deberá ser considerado en etapas posteriores, ya que puede afectar el desempeño de los algoritmos de clasificación y sesgar las predicciones hacia la clase mayoritaria. Por esta razón, será importante utilizar partición estratificada y métricas adecuadas.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Distribución de la variable default&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frecuencia&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/a12222fae7f1034004e1530bbc47f0c6c8e6dae5931558630e3e9de76ffa087c.png" src="_images/a12222fae7f1034004e1530bbc47f0c6c8e6dae5931558630e3e9de76ffa087c.png" />
+</div>
+</div>
+<p>La visualización confirma el predominio de la clase 0 sobre la clase 1, reforzando la evidencia de desbalance observada en la tabla de frecuencias.</p>
+</section>
+<section id="conclusion-de-la-seccion">
+<h2><strong>Conclusión de la sección</strong><a class="headerlink" href="#conclusion-de-la-seccion" title="Permalink to this heading">#</a></h2>
+<p>En esta sección se analizaron las variables categóricas seleccionadas y la variable objetivo <code class="docutils literal notranslate"><span class="pre">default</span></code>. Se evaluó la presencia de valores faltantes, la distribución de las categorías, la existencia de categorías poco frecuentes y el desbalance de clases en la variable objetivo.</p>
+<p>Estos resultados servirán como base para el análisis bidimensional y para las decisiones posteriores de preprocesamiento y modelado.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_eda.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Análisis Exploratorio de Datos (EDA) - Numéricas</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_eda_bidimensional.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacion-de-variables-categoricas"><strong>Identificación de variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#valores-faltantes-en-variables-categoricas"><strong>Valores faltantes en variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seleccion-de-variables-categoricas-para-el-analisis"><strong>Selección de variables categóricas para el análisis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#categorias-con-baja-frecuencia"><strong>Categorías con baja frecuencia</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-de-variables-categoricas"><strong>Visualización de variables categóricas</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-la-variable-objetivo"><strong>Análisis de la variable objetivo</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-de-la-seccion"><strong>Conclusión de la sección</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Camargo, Meza, Rangel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
