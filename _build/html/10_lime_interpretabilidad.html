@@ -1,0 +1,885 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Interpretabilidad con LIME &#8212; Proyecto Integrador ML</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '10_lime_interpretabilidad';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comparación de resultados: scikit-learn vs PySpark" href="11_comparacion_resultados.html" />
+    <link rel="prev" title="Preprocesamiento para PySpark" href="07_preprocesamiento_pyspark.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="ProyectoIntegrador.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Proyecto Integrador ML</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="ProyectoIntegrador.html">
+                    Proyecto Integrador de Aprendizaje Automático
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_dataset_target.html">Dataset y Variable Objetivo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_eda.html"><strong>Análisis Exploratorio de Datos (EDA) - Numéricas</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_edacat.html"><strong>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_eda_bidimensional.html"><strong>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Interpretabilidad con LIME</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/10_lime_interpretabilidad.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Interpretabilidad con LIME</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparacion-de-lime"><strong>Preparación de LIME</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-local-con-lime"><strong>Interpretación local con LIME</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-local-de-la-explicacion"><strong>Visualización local de la explicación</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones-de-lime-en-el-contexto-del-proyecto"><strong>Limitaciones de LIME en el contexto del proyecto</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="interpretabilidad-con-lime">
+<h1><strong>Interpretabilidad con LIME</strong><a class="headerlink" href="#interpretabilidad-con-lime" title="Permalink to this heading">#</a></h1>
+<p>En esta sección se aplica LIME (<em>Local Interpretable Model-agnostic Explanations</em>) con el fin de interpretar localmente las predicciones del modelo de clasificación construido con scikit-learn.</p>
+<p>Siguiendo la guía del proyecto, se seleccionarán una o dos instancias clasificadas erróneamente para analizar cuáles variables influyeron más en la predicción realizada por el modelo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">ColumnTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+
+<span class="kn">from</span> <span class="nn">lime.lime_tabular</span> <span class="kn">import</span> <span class="n">LimeTabularExplainer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\Daniel Rangel\Documents\MachineLearning\Data\accepted_2007_to_2018Q4.csv.gz&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;loan_status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;Charged Off&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">num_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;loan_amnt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;int_rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fico_range_high&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;annual_inc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dti&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;revol_util&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;open_acc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;total_acc&quot;</span>
+<span class="p">]</span>
+
+<span class="n">cat_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;emp_length&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;purpose&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;home_ownership&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;addr_state&quot;</span>
+<span class="p">]</span>
+
+<span class="n">selected_vars</span> <span class="o">=</span> <span class="n">num_vars</span> <span class="o">+</span> <span class="n">cat_vars</span>
+
+<span class="n">df_model</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">selected_vars</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[</span><span class="n">selected_vars</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numeric_transformer</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+<span class="p">])</span>
+
+<span class="n">categorical_transformer</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;most_frequent&quot;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;onehot&quot;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">preprocessor</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span>
+    <span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">,</span> <span class="n">numeric_transformer</span><span class="p">,</span> <span class="n">num_vars</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="n">categorical_transformer</span><span class="p">,</span> <span class="n">cat_vars</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">best_model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;preprocessor&quot;</span><span class="p">,</span> <span class="n">preprocessor</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;classifier&quot;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">max_depth</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span>
+    <span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">best_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_proba</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">errors_df</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">errors_df</span><span class="p">[</span><span class="s2">&quot;y_true&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">values</span>
+<span class="n">errors_df</span><span class="p">[</span><span class="s2">&quot;y_pred&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_pred</span>
+<span class="n">errors_df</span><span class="p">[</span><span class="s2">&quot;y_proba_1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_proba</span>
+
+<span class="n">false_negatives</span> <span class="o">=</span> <span class="n">errors_df</span><span class="p">[(</span><span class="n">errors_df</span><span class="p">[</span><span class="s2">&quot;y_true&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">errors_df</span><span class="p">[</span><span class="s2">&quot;y_pred&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de falsos negativos:&quot;</span><span class="p">,</span> <span class="n">false_negatives</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">false_negatives</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Número de falsos negativos: 53712
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>loan_amnt</th>
+      <th>int_rate</th>
+      <th>fico_range_high</th>
+      <th>annual_inc</th>
+      <th>dti</th>
+      <th>revol_util</th>
+      <th>open_acc</th>
+      <th>total_acc</th>
+      <th>emp_length</th>
+      <th>purpose</th>
+      <th>home_ownership</th>
+      <th>addr_state</th>
+      <th>y_true</th>
+      <th>y_pred</th>
+      <th>y_proba_1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1023051</th>
+      <td>10000.0</td>
+      <td>6.97</td>
+      <td>714.0</td>
+      <td>55000.0</td>
+      <td>18.28</td>
+      <td>76.2</td>
+      <td>8.0</td>
+      <td>23.0</td>
+      <td>10+ years</td>
+      <td>credit_card</td>
+      <td>MORTGAGE</td>
+      <td>NY</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.053073</td>
+    </tr>
+    <tr>
+      <th>329340</th>
+      <td>9175.0</td>
+      <td>15.61</td>
+      <td>674.0</td>
+      <td>50000.0</td>
+      <td>8.59</td>
+      <td>53.0</td>
+      <td>11.0</td>
+      <td>33.0</td>
+      <td>5 years</td>
+      <td>debt_consolidation</td>
+      <td>MORTGAGE</td>
+      <td>NY</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.181765</td>
+    </tr>
+    <tr>
+      <th>267583</th>
+      <td>21375.0</td>
+      <td>15.61</td>
+      <td>699.0</td>
+      <td>85000.0</td>
+      <td>22.43</td>
+      <td>35.8</td>
+      <td>14.0</td>
+      <td>24.0</td>
+      <td>5 years</td>
+      <td>debt_consolidation</td>
+      <td>RENT</td>
+      <td>NV</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.152464</td>
+    </tr>
+    <tr>
+      <th>1613386</th>
+      <td>4000.0</td>
+      <td>7.51</td>
+      <td>764.0</td>
+      <td>47000.0</td>
+      <td>15.63</td>
+      <td>4.4</td>
+      <td>18.0</td>
+      <td>30.0</td>
+      <td>7 years</td>
+      <td>debt_consolidation</td>
+      <td>RENT</td>
+      <td>NJ</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.034932</td>
+    </tr>
+    <tr>
+      <th>158218</th>
+      <td>11000.0</td>
+      <td>9.99</td>
+      <td>744.0</td>
+      <td>100000.0</td>
+      <td>5.03</td>
+      <td>16.9</td>
+      <td>13.0</td>
+      <td>15.0</td>
+      <td>3 years</td>
+      <td>other</td>
+      <td>RENT</td>
+      <td>NJ</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.056323</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="preparacion-de-lime">
+<h2><strong>Preparación de LIME</strong><a class="headerlink" href="#preparacion-de-lime" title="Permalink to this heading">#</a></h2>
+<p>Dado que LIME trabaja en memoria local, se utilizará el modelo de scikit-learn y el conjunto de entrenamiento transformado para construir el explicador local.</p>
+<p>El objetivo es interpretar una o dos instancias clasificadas erróneamente, identificando cuáles variables contribuyeron más a la predicción del modelo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X_train_transformed</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s2">&quot;preprocessor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">X_test_transformed</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s2">&quot;preprocessor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X_train_transformed:&quot;</span><span class="p">,</span> <span class="n">X_train_transformed</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X_test_transformed:&quot;</span><span class="p">,</span> <span class="n">X_test_transformed</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>X_train_transformed: (1808560, 90)
+X_test_transformed: (452141, 90)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s2">&quot;preprocessor&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de features transformadas:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature_names</span><span class="p">))</span>
+<span class="n">feature_names</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Número de features transformadas: 90
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;num__loan_amnt&#39;, &#39;num__int_rate&#39;, &#39;num__fico_range_high&#39;,
+       &#39;num__annual_inc&#39;, &#39;num__dti&#39;, &#39;num__revol_util&#39;, &#39;num__open_acc&#39;,
+       &#39;num__total_acc&#39;, &#39;cat__emp_length_1 year&#39;,
+       &#39;cat__emp_length_10+ years&#39;, &#39;cat__emp_length_2 years&#39;,
+       &#39;cat__emp_length_3 years&#39;, &#39;cat__emp_length_4 years&#39;,
+       &#39;cat__emp_length_5 years&#39;, &#39;cat__emp_length_6 years&#39;,
+       &#39;cat__emp_length_7 years&#39;, &#39;cat__emp_length_8 years&#39;,
+       &#39;cat__emp_length_9 years&#39;, &#39;cat__emp_length_&lt; 1 year&#39;,
+       &#39;cat__purpose_car&#39;], dtype=object)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">explainer</span> <span class="o">=</span> <span class="n">LimeTabularExplainer</span><span class="p">(</span>
+    <span class="n">training_data</span><span class="o">=</span><span class="n">X_train_transformed</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">X_train_transformed</span><span class="p">,</span> <span class="s2">&quot;toarray&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">X_train_transformed</span><span class="p">,</span>
+    <span class="n">feature_names</span><span class="o">=</span><span class="n">feature_names</span><span class="p">,</span>
+    <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;No Default&quot;</span><span class="p">,</span> <span class="s2">&quot;Default&quot;</span><span class="p">],</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Seleccionamos la primera instancia mal clasificada (falso negativo)</span>
+<span class="n">idx_instance</span> <span class="o">=</span> <span class="n">false_negatives</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">x_instance_raw</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_instance</span><span class="p">]</span>
+<span class="n">x_instance_transformed</span> <span class="o">=</span> <span class="n">X_test_transformed</span><span class="p">[</span><span class="n">X_test</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">idx_instance</span><span class="p">)]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Índice de la instancia:&quot;</span><span class="p">,</span> <span class="n">idx_instance</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clase real:&quot;</span><span class="p">,</span> <span class="n">y_test</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx_instance</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Clase predicha:&quot;</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">[</span><span class="n">X_test</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">idx_instance</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Probabilidad predicha de default:&quot;</span><span class="p">,</span> <span class="n">y_proba</span><span class="p">[</span><span class="n">X_test</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">get_loc</span><span class="p">(</span><span class="n">idx_instance</span><span class="p">)])</span>
+<span class="n">x_instance_raw</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Índice de la instancia: 1023051
+Clase real: 1
+Clase predicha: 0
+Probabilidad predicha de default: 0.053073229501496996
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>loan_amnt              10000.0
+int_rate                  6.97
+fico_range_high          714.0
+annual_inc             55000.0
+dti                      18.28
+revol_util                76.2
+open_acc                   8.0
+total_acc                 23.0
+emp_length           10+ years
+purpose            credit_card
+home_ownership        MORTGAGE
+addr_state                  NY
+Name: 1023051, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rf_classifier</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s2">&quot;classifier&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">predict_proba_transformed</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">rf_classifier</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">explanation</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span>
+    <span class="n">data_row</span><span class="o">=</span><span class="n">x_instance_transformed</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">x_instance_transformed</span><span class="p">,</span> <span class="s2">&quot;toarray&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="n">x_instance_transformed</span><span class="p">,</span>
+    <span class="n">predict_fn</span><span class="o">=</span><span class="n">predict_proba_transformed</span><span class="p">,</span>
+    <span class="n">num_features</span><span class="o">=</span><span class="mi">10</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">explanation</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;num__int_rate &lt;= -0.75&#39;, -0.053969244819468146),
+ (&#39;cat__addr_state_DC &lt;= 0.00&#39;, -0.03395334959278614),
+ (&#39;cat__addr_state_RI &lt;= 0.00&#39;, -0.03016802899226885),
+ (&#39;cat__purpose_renewable_energy &lt;= 0.00&#39;, 0.027209476786014562),
+ (&#39;cat__addr_state_UT &lt;= 0.00&#39;, -0.02427692936649252),
+ (&#39;cat__addr_state_DE &lt;= 0.00&#39;, -0.021523431183177545),
+ (&#39;cat__purpose_small_business &lt;= 0.00&#39;, -0.017575408729062096),
+ (&#39;cat__home_ownership_OTHER &lt;= 0.00&#39;, -0.016776883793650253),
+ (&#39;cat__addr_state_AK &lt;= 0.00&#39;, 0.014520146096008511),
+ (&#39;cat__purpose_educational &lt;= 0.00&#39;, 0.012315681932122343)]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretacion-local-con-lime">
+<h2><strong>Interpretación local con LIME</strong><a class="headerlink" href="#interpretacion-local-con-lime" title="Permalink to this heading">#</a></h2>
+<p>La explicación local generada por LIME muestra cuáles variables influyeron más en la predicción realizada por el modelo para esta instancia específica, que corresponde a un <strong>falso negativo</strong>: un préstamo realmente en default (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>) pero clasificado por el modelo como no default (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p>
+<p>Entre los factores con mayor peso hacia la predicción de <strong>no default</strong>, destaca la variable <code class="docutils literal notranslate"><span class="pre">int_rate</span></code>, cuyo valor transformado aparece en un rango bajo (<code class="docutils literal notranslate"><span class="pre">num__int_rate</span> <span class="pre">&lt;=</span> <span class="pre">-0.75</span></code>). Esto es consistente con la observación de que tasas de interés bajas suelen asociarse con menor riesgo percibido por el modelo.</p>
+<p>También aparecen varias variables categóricas relacionadas con el estado (<code class="docutils literal notranslate"><span class="pre">addr_state</span></code>) y con el propósito del préstamo (<code class="docutils literal notranslate"><span class="pre">purpose</span></code>). En particular, la ausencia de categorías de alto riesgo como <code class="docutils literal notranslate"><span class="pre">small_business</span></code> o <code class="docutils literal notranslate"><span class="pre">renewable_energy</span></code> contribuyó a empujar la predicción hacia la clase 0.</p>
+<p>En conjunto, la explicación sugiere que el modelo interpretó esta observación como un caso de bajo riesgo debido a señales favorables como una tasa de interés reducida y la ausencia de ciertas categorías asociadas con mayores tasas de default. Sin embargo, en la realidad se trataba de un préstamo que sí terminó en incumplimiento, lo cual evidencia una limitación del modelo para capturar todos los patrones que explican la clase positiva.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">explanation</span><span class="o">.</span><span class="n">as_pyplot_figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/081b015c71c199affbb770aacb6afab6dc34d7ec82c92c9d5ecddafaac9a69ab.png" src="_images/081b015c71c199affbb770aacb6afab6dc34d7ec82c92c9d5ecddafaac9a69ab.png" />
+</div>
+</div>
+<section id="visualizacion-local-de-la-explicacion">
+<h3><strong>Visualización local de la explicación</strong><a class="headerlink" href="#visualizacion-local-de-la-explicacion" title="Permalink to this heading">#</a></h3>
+<p>El gráfico local de LIME permite observar de manera visual qué variables empujaron la predicción del modelo hacia la clase <strong>Default</strong> y cuáles la alejaron de dicha clase.</p>
+<p>En esta explicación, las barras verdes representan variables que aumentan la probabilidad de default, mientras que las barras rojas representan variables que empujan la predicción hacia la clase contraria.</p>
+<p>Se observa que la variable con mayor influencia local es <code class="docutils literal notranslate"><span class="pre">int_rate</span></code>, cuyo valor bajo contribuyó fuertemente a que el modelo redujera la probabilidad estimada de default para esta observación. Asimismo, la ausencia de ciertas categorías asociadas con mayor riesgo, como <code class="docutils literal notranslate"><span class="pre">small_business</span></code> o <code class="docutils literal notranslate"><span class="pre">renewable_energy</span></code>, también contribuyó a desplazar la predicción hacia la clase no default.</p>
+<p>En conjunto, la visualización confirma que el modelo basó su decisión en señales localmente coherentes con su lógica interna, aunque en este caso dichas señales no fueron suficientes para identificar correctamente el incumplimiento real de la instancia analizada.</p>
+</section>
+</section>
+<section id="limitaciones-de-lime-en-el-contexto-del-proyecto">
+<h2><strong>Limitaciones de LIME en el contexto del proyecto</strong><a class="headerlink" href="#limitaciones-de-lime-en-el-contexto-del-proyecto" title="Permalink to this heading">#</a></h2>
+<p>LIME se aplicó sobre el modelo entrenado con scikit-learn, ya que esta herramienta opera en memoria local y requiere acceso directo a un modelo que pueda evaluar perturbaciones sobre instancias individuales.</p>
+<p>En el caso de PySpark, la aplicación de LIME resulta más limitada, dado que el flujo de modelado trabaja sobre estructuras distribuidas y no está diseñado para generar explicaciones locales directamente en memoria de la misma forma que un modelo de scikit-learn.</p>
+<p>Por esta razón, aunque LIME es útil para ilustrar la interpretabilidad local del problema, su uso es más natural y práctico sobre el modelo entrenado en scikit-learn que sobre el flujo distribuido implementado en PySpark.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_preprocesamiento_pyspark.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Preprocesamiento para PySpark</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="11_comparacion_resultados.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preparacion-de-lime"><strong>Preparación de LIME</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-local-con-lime"><strong>Interpretación local con LIME</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-local-de-la-explicacion"><strong>Visualización local de la explicación</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limitaciones-de-lime-en-el-contexto-del-proyecto"><strong>Limitaciones de LIME en el contexto del proyecto</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Camargo, Meza, Rangel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

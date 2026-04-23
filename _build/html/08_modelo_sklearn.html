@@ -1,0 +1,984 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Modelado Con scikit-learn &#8212; Proyecto Integrador ML</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '08_modelo_sklearn';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modelado con PySpark" href="09_modelo_pyspark.html" />
+    <link rel="prev" title="Preprocesamiento para PySpark" href="07_preprocesamiento_pyspark.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="ProyectoIntegrador.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Proyecto Integrador ML</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="ProyectoIntegrador.html">
+                    Proyecto Integrador de Aprendizaje Automático
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_dataset_target.html">Dataset y Variable Objetivo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_eda.html"><strong>Análisis Exploratorio de Datos (EDA) - Numéricas</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_edacat.html"><strong>Análisis Exploratorio de Datos (EDA) - Categóricas y Target</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_eda_bidimensional.html"><strong>Análisis Exploratorio de Datos (EDA) - Análisis Bidimensional</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_eda_resumen.html"><strong>Resumen Ejecutivo Del EDA</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_preprocesamiento_sklearn.html"><strong>Preprocesamiento para scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_preprocesamiento_pyspark.html"><strong>Preprocesamiento para PySpark</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Modelado Con scikit-learn</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_modelo_pyspark.html"><strong>Modelado con PySpark</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_lime_interpretabilidad.html"><strong>Interpretabilidad con LIME</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_comparacion_resultados.html"><strong>Comparación de resultados: scikit-learn vs PySpark</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/08_modelo_sklearn.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Modelado Con scikit-learn</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#carga-del-dataset-y-seleccion-de-variables"><strong>Carga del dataset y selección de variables</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#particion-en-entrenamiento-y-prueba"><strong>Partición en entrenamiento y prueba</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-de-preprocesamiento"><strong>Pipeline de preprocesamiento</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definicion-del-modelo-y-busqueda-de-hiperparametros"><strong>Definición del modelo y búsqueda de hiperparámetros</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-modelo"><strong>Entrenamiento del modelo</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultado-de-la-busqueda-de-hiperparametros"><strong>Resultado de la búsqueda de hiperparámetros</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediccion-sobre-el-conjunto-de-prueba"><strong>Predicción sobre el conjunto de prueba</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-del-modelo-en-el-conjunto-de-prueba"><strong>Evaluación del modelo en el conjunto de prueba</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-matriz-de-confusion"><strong>Interpretación de la matriz de confusión</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-classification-report"><strong>Interpretación del classification report</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-de-la-evaluacion-del-modelo-scikit-learn"><strong>Conclusión de la evaluación del modelo scikit-learn</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="modelado-con-scikit-learn">
+<h1><strong>Modelado Con scikit-learn</strong><a class="headerlink" href="#modelado-con-scikit-learn" title="Permalink to this heading">#</a></h1>
+<p>En esta sección se implementa el modelo de clasificación con scikit-learn utilizando un <code class="docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code>.</p>
+<p>Siguiendo la guía del proyecto, se aplicará una búsqueda de hiperparámetros mediante <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code>, y posteriormente se evaluará el desempeño del mejor modelo utilizando diversas métricas de clasificación.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span><span class="p">,</span> <span class="n">GridSearchCV</span>
+<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">ColumnTransformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">OneHotEncoder</span><span class="p">,</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">precision_score</span><span class="p">,</span> <span class="n">recall_score</span><span class="p">,</span> <span class="n">f1_score</span><span class="p">,</span>
+    <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">classification_report</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="carga-del-dataset-y-seleccion-de-variables">
+<h2><strong>Carga del dataset y selección de variables</strong><a class="headerlink" href="#carga-del-dataset-y-seleccion-de-variables" title="Permalink to this heading">#</a></h2>
+<p>Se reconstruye el subconjunto de variables seleccionado en la etapa de preprocesamiento, con el fin de mantener este notebook autocontenido y reproducible.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\Users\Daniel Rangel\Documents\MachineLearning\Data\accepted_2007_to_2018Q4.csv.gz&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">low_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;loan_status&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot;Charged Off&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">num_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;loan_amnt&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;int_rate&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fico_range_high&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;annual_inc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dti&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;revol_util&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;open_acc&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;total_acc&quot;</span>
+<span class="p">]</span>
+
+<span class="n">cat_vars</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;emp_length&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;purpose&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;home_ownership&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;addr_state&quot;</span>
+<span class="p">]</span>
+
+<span class="n">selected_vars</span> <span class="o">=</span> <span class="n">num_vars</span> <span class="o">+</span> <span class="n">cat_vars</span>
+
+<span class="n">df_model</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">selected_vars</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dimensión del subconjunto:&quot;</span><span class="p">,</span> <span class="n">df_model</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dimensión del subconjunto: (2260701, 13)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="particion-en-entrenamiento-y-prueba">
+<h2><strong>Partición en entrenamiento y prueba</strong><a class="headerlink" href="#particion-en-entrenamiento-y-prueba" title="Permalink to this heading">#</a></h2>
+<p>Se divide el dataset en entrenamiento y prueba con una proporción 80/20, utilizando estratificación sobre la variable objetivo para conservar la distribución de clases en ambos subconjuntos.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[</span><span class="n">selected_vars</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_model</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="mf">0.20</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">stratify</span><span class="o">=</span><span class="n">y</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X_train:&quot;</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;X_test:&quot;</span><span class="p">,</span> <span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distribución y_train:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distribución y_test:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>X_train: (1808560, 12)
+X_test: (452141, 12)
+Distribución y_train:
+0    0.8812
+1    0.1188
+Name: default, dtype: float64
+Distribución y_test:
+0    0.8812
+1    0.1188
+Name: default, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pipeline-de-preprocesamiento">
+<h2><strong>Pipeline de preprocesamiento</strong><a class="headerlink" href="#pipeline-de-preprocesamiento" title="Permalink to this heading">#</a></h2>
+<p>Las variables numéricas se imputan con la mediana y se escalan con <code class="docutils literal notranslate"><span class="pre">StandardScaler</span></code>, mientras que las variables categóricas se imputan con la categoría más frecuente y se codifican mediante <code class="docutils literal notranslate"><span class="pre">OneHotEncoder</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numeric_transformer</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;scaler&quot;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+<span class="p">])</span>
+
+<span class="n">categorical_transformer</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;imputer&quot;</span><span class="p">,</span> <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;most_frequent&quot;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;onehot&quot;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">preprocessor</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span>
+    <span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">,</span> <span class="n">numeric_transformer</span><span class="p">,</span> <span class="n">num_vars</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="n">categorical_transformer</span><span class="p">,</span> <span class="n">cat_vars</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="definicion-del-modelo-y-busqueda-de-hiperparametros">
+<h2><strong>Definición del modelo y búsqueda de hiperparámetros</strong><a class="headerlink" href="#definicion-del-modelo-y-busqueda-de-hiperparametros" title="Permalink to this heading">#</a></h2>
+<p>Se construye un pipeline que integra el preprocesamiento y el clasificador <code class="docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code>. Posteriormente, se realiza una búsqueda de hiperparámetros con <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code>, utilizando la grilla establecida en la guía del proyecto.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rf_pipeline</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;preprocessor&quot;</span><span class="p">,</span> <span class="n">preprocessor</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;classifier&quot;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;classifier__n_estimators&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+    <span class="s2">&quot;classifier__max_depth&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">grid_search</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span>
+    <span class="n">rf_pipeline</span><span class="p">,</span>
+    <span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span>
+    <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="entrenamiento-del-modelo">
+<h2><strong>Entrenamiento del modelo</strong><a class="headerlink" href="#entrenamiento-del-modelo" title="Permalink to this heading">#</a></h2>
+<p>Se entrena el modelo de Random Forest utilizando <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code>, con el fin de identificar la mejor combinación de hiperparámetros dentro de la grilla definida.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_train</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">grid_search</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">train_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_train</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mejores parámetros:&quot;</span><span class="p">,</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiempo de entrenamiento: </span><span class="si">{</span><span class="n">train_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> segundos&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fitting 3 folds for each of 9 candidates, totalling 27 fits
+[CV] END classifier__max_depth=5, classifier__n_estimators=10; total time=  16.1s
+[CV] END classifier__max_depth=5, classifier__n_estimators=10; total time=  15.4s
+[CV] END classifier__max_depth=5, classifier__n_estimators=10; total time=  14.9s
+[CV] END classifier__max_depth=5, classifier__n_estimators=50; total time= 1.0min
+[CV] END classifier__max_depth=5, classifier__n_estimators=50; total time= 1.0min
+[CV] END classifier__max_depth=5, classifier__n_estimators=50; total time=  59.5s
+[CV] END classifier__max_depth=5, classifier__n_estimators=100; total time= 1.9min
+[CV] END classifier__max_depth=5, classifier__n_estimators=100; total time= 1.9min
+[CV] END classifier__max_depth=5, classifier__n_estimators=100; total time= 1.9min
+[CV] END classifier__max_depth=10, classifier__n_estimators=10; total time=  46.2s
+[CV] END classifier__max_depth=10, classifier__n_estimators=10; total time=  44.2s
+[CV] END classifier__max_depth=10, classifier__n_estimators=10; total time=  45.2s
+[CV] END classifier__max_depth=10, classifier__n_estimators=50; total time= 3.4min
+[CV] END classifier__max_depth=10, classifier__n_estimators=50; total time= 3.4min
+[CV] END classifier__max_depth=10, classifier__n_estimators=50; total time= 3.5min
+[CV] END classifier__max_depth=10, classifier__n_estimators=100; total time= 6.8min
+[CV] END classifier__max_depth=10, classifier__n_estimators=100; total time= 6.8min
+[CV] END classifier__max_depth=10, classifier__n_estimators=100; total time= 6.9min
+[CV] END classifier__max_depth=15, classifier__n_estimators=10; total time= 2.1min
+[CV] END classifier__max_depth=15, classifier__n_estimators=10; total time= 2.3min
+[CV] END classifier__max_depth=15, classifier__n_estimators=10; total time= 2.2min
+[CV] END classifier__max_depth=15, classifier__n_estimators=50; total time=10.4min
+[CV] END classifier__max_depth=15, classifier__n_estimators=50; total time=10.7min
+[CV] END classifier__max_depth=15, classifier__n_estimators=50; total time=10.7min
+[CV] END classifier__max_depth=15, classifier__n_estimators=100; total time=20.8min
+[CV] END classifier__max_depth=15, classifier__n_estimators=100; total time=20.9min
+[CV] END classifier__max_depth=15, classifier__n_estimators=100; total time=21.0min
+Mejores parámetros: {&#39;classifier__max_depth&#39;: 15, &#39;classifier__n_estimators&#39;: 10}
+Tiempo de entrenamiento: 8845.24 segundos
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="resultado-de-la-busqueda-de-hiperparametros">
+<h2><strong>Resultado de la búsqueda de hiperparámetros</strong><a class="headerlink" href="#resultado-de-la-busqueda-de-hiperparametros" title="Permalink to this heading">#</a></h2>
+<p>La búsqueda de hiperparámetros con <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code> se completó satisfactoriamente, evaluando un total de 27 ajustes correspondientes a 9 combinaciones de parámetros con validación cruzada de 3 folds.</p>
+<p>La mejor configuración encontrada fue:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">max_depth</span> <span class="pre">=</span> <span class="pre">15</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_estimators</span> <span class="pre">=</span> <span class="pre">10</span></code></p></li>
+</ul>
+<p>El tiempo total de entrenamiento fue de aproximadamente <strong>8845.24 segundos</strong>, equivalente a cerca de <strong>2.46 horas</strong>.</p>
+<p>Este resultado evidencia que, aunque el flujo con scikit-learn es funcional sobre el dataset completo, el costo computacional en tiempo es elevado en un entorno local, especialmente al combinar validación cruzada, codificación de variables categóricas y búsqueda de hiperparámetros.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">best_model</span> <span class="o">=</span> <span class="n">grid_search</span><span class="o">.</span><span class="n">best_estimator_</span>
+<span class="n">best_model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>#sk-container-id-1 {color: black;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[(&#x27;preprocessor&#x27;,
+                 ColumnTransformer(transformers=[(&#x27;num&#x27;,
+                                                  Pipeline(steps=[(&#x27;imputer&#x27;,
+                                                                   SimpleImputer(strategy=&#x27;median&#x27;)),
+                                                                  (&#x27;scaler&#x27;,
+                                                                   StandardScaler())]),
+                                                  [&#x27;loan_amnt&#x27;, &#x27;int_rate&#x27;,
+                                                   &#x27;fico_range_high&#x27;,
+                                                   &#x27;annual_inc&#x27;, &#x27;dti&#x27;,
+                                                   &#x27;revol_util&#x27;, &#x27;open_acc&#x27;,
+                                                   &#x27;total_acc&#x27;]),
+                                                 (&#x27;cat&#x27;,
+                                                  Pipeline(steps=[(&#x27;imputer&#x27;,
+                                                                   SimpleImputer(strategy=&#x27;most_frequent&#x27;)),
+                                                                  (&#x27;onehot&#x27;,
+                                                                   OneHotEncoder(handle_unknown=&#x27;ignore&#x27;))]),
+                                                  [&#x27;emp_length&#x27;, &#x27;purpose&#x27;,
+                                                   &#x27;home_ownership&#x27;,
+                                                   &#x27;addr_state&#x27;])])),
+                (&#x27;classifier&#x27;,
+                 RandomForestClassifier(max_depth=15, n_estimators=10, n_jobs=1,
+                                        random_state=42))])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[(&#x27;preprocessor&#x27;,
+                 ColumnTransformer(transformers=[(&#x27;num&#x27;,
+                                                  Pipeline(steps=[(&#x27;imputer&#x27;,
+                                                                   SimpleImputer(strategy=&#x27;median&#x27;)),
+                                                                  (&#x27;scaler&#x27;,
+                                                                   StandardScaler())]),
+                                                  [&#x27;loan_amnt&#x27;, &#x27;int_rate&#x27;,
+                                                   &#x27;fico_range_high&#x27;,
+                                                   &#x27;annual_inc&#x27;, &#x27;dti&#x27;,
+                                                   &#x27;revol_util&#x27;, &#x27;open_acc&#x27;,
+                                                   &#x27;total_acc&#x27;]),
+                                                 (&#x27;cat&#x27;,
+                                                  Pipeline(steps=[(&#x27;imputer&#x27;,
+                                                                   SimpleImputer(strategy=&#x27;most_frequent&#x27;)),
+                                                                  (&#x27;onehot&#x27;,
+                                                                   OneHotEncoder(handle_unknown=&#x27;ignore&#x27;))]),
+                                                  [&#x27;emp_length&#x27;, &#x27;purpose&#x27;,
+                                                   &#x27;home_ownership&#x27;,
+                                                   &#x27;addr_state&#x27;])])),
+                (&#x27;classifier&#x27;,
+                 RandomForestClassifier(max_depth=15, n_estimators=10, n_jobs=1,
+                                        random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[(&#x27;num&#x27;,
+                                 Pipeline(steps=[(&#x27;imputer&#x27;,
+                                                  SimpleImputer(strategy=&#x27;median&#x27;)),
+                                                 (&#x27;scaler&#x27;, StandardScaler())]),
+                                 [&#x27;loan_amnt&#x27;, &#x27;int_rate&#x27;, &#x27;fico_range_high&#x27;,
+                                  &#x27;annual_inc&#x27;, &#x27;dti&#x27;, &#x27;revol_util&#x27;, &#x27;open_acc&#x27;,
+                                  &#x27;total_acc&#x27;]),
+                                (&#x27;cat&#x27;,
+                                 Pipeline(steps=[(&#x27;imputer&#x27;,
+                                                  SimpleImputer(strategy=&#x27;most_frequent&#x27;)),
+                                                 (&#x27;onehot&#x27;,
+                                                  OneHotEncoder(handle_unknown=&#x27;ignore&#x27;))]),
+                                 [&#x27;emp_length&#x27;, &#x27;purpose&#x27;, &#x27;home_ownership&#x27;,
+                                  &#x27;addr_state&#x27;])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">num</label><div class="sk-toggleable__content"><pre>[&#x27;loan_amnt&#x27;, &#x27;int_rate&#x27;, &#x27;fico_range_high&#x27;, &#x27;annual_inc&#x27;, &#x27;dti&#x27;, &#x27;revol_util&#x27;, &#x27;open_acc&#x27;, &#x27;total_acc&#x27;]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label sk-toggleable__label-arrow">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy=&#x27;median&#x27;)</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" ><label for="sk-estimator-id-5" class="sk-toggleable__label sk-toggleable__label-arrow">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox" ><label for="sk-estimator-id-6" class="sk-toggleable__label sk-toggleable__label-arrow">cat</label><div class="sk-toggleable__content"><pre>[&#x27;emp_length&#x27;, &#x27;purpose&#x27;, &#x27;home_ownership&#x27;, &#x27;addr_state&#x27;]</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox" ><label for="sk-estimator-id-7" class="sk-toggleable__label sk-toggleable__label-arrow">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy=&#x27;most_frequent&#x27;)</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-8" type="checkbox" ><label for="sk-estimator-id-8" class="sk-toggleable__label sk-toggleable__label-arrow">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown=&#x27;ignore&#x27;)</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-9" type="checkbox" ><label for="sk-estimator-id-9" class="sk-toggleable__label sk-toggleable__label-arrow">RandomForestClassifier</label><div class="sk-toggleable__content"><pre>RandomForestClassifier(max_depth=15, n_estimators=10, n_jobs=1, random_state=42)</pre></div></div></div></div></div></div></div></div></div>
+</div>
+</section>
+<section id="prediccion-sobre-el-conjunto-de-prueba">
+<h2><strong>Predicción sobre el conjunto de prueba</strong><a class="headerlink" href="#prediccion-sobre-el-conjunto-de-prueba" title="Permalink to this heading">#</a></h2>
+<p>Una vez identificado el mejor modelo mediante <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code>, se realizan predicciones sobre el conjunto de prueba para evaluar su desempeño y medir el tiempo requerido en la etapa de inferencia.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_pred</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_proba</span> <span class="o">=</span> <span class="n">best_model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">pred_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_pred</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiempo de predicción: </span><span class="si">{</span><span class="n">pred_time</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> segundos&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Número de predicciones:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_pred</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Tiempo de predicción: 2.68 segundos
+Número de predicciones: 452141
+</pre></div>
+</div>
+</div>
+</div>
+<p>El mejor modelo seleccionado mediante <code class="docutils literal notranslate"><span class="pre">GridSearchCV</span></code> realizó predicciones sobre el conjunto de prueba en aproximadamente <strong>2.68 segundos</strong>.</p>
+<p>Este tiempo de inferencia es considerablemente menor que el tiempo de entrenamiento, lo cual es esperable en modelos de Random Forest una vez que el proceso de ajuste y selección de hiperparámetros ha concluido.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">precision</span> <span class="o">=</span> <span class="n">precision_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">recall</span> <span class="o">=</span> <span class="n">recall_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">f1_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_proba</span><span class="p">)</span>
+
+<span class="n">metrics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s2">&quot;Métrica&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;Precision&quot;</span><span class="p">,</span> <span class="s2">&quot;Recall&quot;</span><span class="p">,</span> <span class="s2">&quot;F1-score&quot;</span><span class="p">,</span> <span class="s2">&quot;ROC AUC&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;Valor&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">accuracy</span><span class="p">,</span> <span class="n">precision</span><span class="p">,</span> <span class="n">recall</span><span class="p">,</span> <span class="n">f1</span><span class="p">,</span> <span class="n">roc_auc</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="n">metrics_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\Users\Daniel Rangel\miniconda3\envs\ml_rangel\lib\site-packages\sklearn\metrics\_classification.py:1469: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Métrica</th>
+      <th>Valor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Accuracy</td>
+      <td>0.881205</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Precision</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Recall</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>F1-score</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ROC AUC</td>
+      <td>0.695485</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="evaluacion-del-modelo-en-el-conjunto-de-prueba">
+<h2><strong>Evaluación del modelo en el conjunto de prueba</strong><a class="headerlink" href="#evaluacion-del-modelo-en-el-conjunto-de-prueba" title="Permalink to this heading">#</a></h2>
+<p>Los resultados muestran un comportamiento fuertemente afectado por el desbalance de clases presente en la variable objetivo.</p>
+<p>El modelo alcanza una <strong>accuracy de 0.8812</strong>, valor que a primera vista parece alto. Sin embargo, esta métrica resulta engañosa en este contexto, ya que coincide prácticamente con la proporción de la clase mayoritaria en el dataset.</p>
+<p>En contraste, las métricas de la clase positiva muestran un desempeño nulo:</p>
+<ul class="simple">
+<li><p><strong>Precision = 0.0</strong></p></li>
+<li><p><strong>Recall = 0.0</strong></p></li>
+<li><p><strong>F1-score = 0.0</strong></p></li>
+</ul>
+<p>Esto indica que el modelo no predijo ningún caso como <code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>, clasificando todas las observaciones como pertenecientes a la clase mayoritaria (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p>
+<p>A pesar de ello, el valor de <strong>ROC AUC = 0.6955</strong> sugiere que el modelo sí logra cierto nivel de discriminación en las probabilidades estimadas, aunque dicha capacidad no se traduce en predicciones positivas bajo el umbral de decisión por defecto.</p>
+<p>En consecuencia, estos resultados confirman que el desbalance de clases representa un problema importante y que será necesario considerar ajustes posteriores, como el uso de pesos de clase, modificación del umbral de decisión o estrategias de balanceo.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+<span class="n">cm_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="n">cm</span><span class="p">,</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Real 0&quot;</span><span class="p">,</span> <span class="s2">&quot;Real 1&quot;</span><span class="p">],</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Predicho 0&quot;</span><span class="p">,</span> <span class="s2">&quot;Predicho 1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">cm_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Predicho 0</th>
+      <th>Predicho 1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Real 0</th>
+      <td>398429</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>Real 1</th>
+      <td>53712</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="interpretacion-de-la-matriz-de-confusion">
+<h3><strong>Interpretación de la matriz de confusión</strong><a class="headerlink" href="#interpretacion-de-la-matriz-de-confusion" title="Permalink to this heading">#</a></h3>
+<p>La matriz de confusión muestra que el modelo clasificó <strong>todas</strong> las observaciones del conjunto de prueba como pertenecientes a la clase <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<p>En particular:</p>
+<ul class="simple">
+<li><p>Los <strong>398,429</strong> casos reales de la clase <code class="docutils literal notranslate"><span class="pre">0</span></code> fueron clasificados correctamente.</p></li>
+<li><p>Los <strong>53,712</strong> casos reales de la clase <code class="docutils literal notranslate"><span class="pre">1</span></code> fueron clasificados incorrectamente como <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
+<li><p>No se registró ninguna predicción de la clase positiva.</p></li>
+</ul>
+<p>Este comportamiento explica por qué la accuracy resulta alta, pero las métricas de la clase positiva (<code class="docutils literal notranslate"><span class="pre">precision</span></code>, <code class="docutils literal notranslate"><span class="pre">recall</span></code> y <code class="docutils literal notranslate"><span class="pre">F1-score</span></code>) toman valor cero. En la práctica, esto significa que el modelo no está cumpliendo adecuadamente el objetivo del problema, ya que no logra identificar préstamos en default.</p>
+<p>Por tanto, aunque el modelo presenta capacidad de discriminación en términos de ROC AUC, el umbral de decisión por defecto y el desbalance de clases impiden que esa información se traduzca en predicciones útiles para la clase minoritaria.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>              precision    recall  f1-score   support
+
+           0       0.88      1.00      0.94    398429
+           1       0.00      0.00      0.00     53712
+
+    accuracy                           0.88    452141
+   macro avg       0.44      0.50      0.47    452141
+weighted avg       0.78      0.88      0.83    452141
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretacion-del-classification-report">
+<h3><strong>Interpretación del classification report</strong><a class="headerlink" href="#interpretacion-del-classification-report" title="Permalink to this heading">#</a></h3>
+<p>El reporte de clasificación confirma que el modelo presenta un desempeño aceptable únicamente sobre la clase mayoritaria (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">0</span></code>), pero falla por completo en la identificación de la clase minoritaria (<code class="docutils literal notranslate"><span class="pre">default</span> <span class="pre">=</span> <span class="pre">1</span></code>).</p>
+<p>Para la clase <code class="docutils literal notranslate"><span class="pre">0</span></code>, el modelo alcanza:</p>
+<ul class="simple">
+<li><p><strong>precision = 0.88</strong></p></li>
+<li><p><strong>recall = 1.00</strong></p></li>
+<li><p><strong>f1-score = 0.94</strong></p></li>
+</ul>
+<p>Esto indica que prácticamente todos los casos fueron clasificados como no default, y que la clase mayoritaria fue capturada por completo.</p>
+<p>Sin embargo, para la clase <code class="docutils literal notranslate"><span class="pre">1</span></code>, todas las métricas son iguales a cero:</p>
+<ul class="simple">
+<li><p><strong>precision = 0.00</strong></p></li>
+<li><p><strong>recall = 0.00</strong></p></li>
+<li><p><strong>f1-score = 0.00</strong></p></li>
+</ul>
+<p>Esto significa que el modelo no logró identificar ningún préstamo en default dentro del conjunto de prueba.</p>
+<p>Asimismo, la diferencia entre el <strong>macro average</strong> y el <strong>weighted average</strong> refleja el impacto del desbalance de clases. Mientras el promedio ponderado permanece relativamente alto debido al predominio de la clase 0, el promedio macro evidencia un desempeño muy deficiente cuando ambas clases se consideran con igual importancia.</p>
+<p>En consecuencia, aunque el flujo de modelado se ejecutó correctamente, el modelo obtenido en esta configuración no resulta adecuado para el objetivo del problema, ya que no logra detectar la clase positiva de interés.</p>
+</section>
+</section>
+<section id="conclusion-de-la-evaluacion-del-modelo-scikit-learn">
+<h2><strong>Conclusión de la evaluación del modelo scikit-learn</strong><a class="headerlink" href="#conclusion-de-la-evaluacion-del-modelo-scikit-learn" title="Permalink to this heading">#</a></h2>
+<p>El modelo Random Forest implementado con scikit-learn logró entrenarse correctamente y alcanzar una accuracy alta; sin embargo, dicha métrica resulta engañosa en el contexto de un problema desbalanceado.</p>
+<p>Las métricas de la clase positiva, la matriz de confusión y el reporte de clasificación muestran que el modelo no identifica casos de default bajo la configuración actual, clasificando todas las observaciones como pertenecientes a la clase mayoritaria.</p>
+<p>Por tanto, los resultados sugieren que será necesario considerar estrategias adicionales para abordar el desbalance de clases, tales como el uso de pesos de clase, ajuste del umbral de decisión o técnicas de balanceo, antes de considerar este modelo como una solución adecuada al problema planteado.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_preprocesamiento_pyspark.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Preprocesamiento para PySpark</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="09_modelo_pyspark.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Modelado con PySpark</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#carga-del-dataset-y-seleccion-de-variables"><strong>Carga del dataset y selección de variables</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#particion-en-entrenamiento-y-prueba"><strong>Partición en entrenamiento y prueba</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-de-preprocesamiento"><strong>Pipeline de preprocesamiento</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definicion-del-modelo-y-busqueda-de-hiperparametros"><strong>Definición del modelo y búsqueda de hiperparámetros</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entrenamiento-del-modelo"><strong>Entrenamiento del modelo</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resultado-de-la-busqueda-de-hiperparametros"><strong>Resultado de la búsqueda de hiperparámetros</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediccion-sobre-el-conjunto-de-prueba"><strong>Predicción sobre el conjunto de prueba</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluacion-del-modelo-en-el-conjunto-de-prueba"><strong>Evaluación del modelo en el conjunto de prueba</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-matriz-de-confusion"><strong>Interpretación de la matriz de confusión</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-classification-report"><strong>Interpretación del classification report</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-de-la-evaluacion-del-modelo-scikit-learn"><strong>Conclusión de la evaluación del modelo scikit-learn</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Camargo, Meza, Rangel
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

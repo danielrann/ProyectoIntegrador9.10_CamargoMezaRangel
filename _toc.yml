@@ -1,0 +1,15 @@
+format: jb-book
+root: ProyectoIntegrador
+
+chapters:
+  - file: 01_dataset_target
+  - file: 02_eda
+  - file: 03_edacat
+  - file: 04_eda_bidimensional
+  - file: 05_eda_resumen
+  - file: 06_preprocesamiento_sklearn
+  - file: 07_preprocesamiento_pyspark
+  - file: 08_modelo_sklearn
+  - file: 09_modelo_pyspark
+  - file: 10_lime_interpretabilidad
+  - file: 11_comparacion_resultados
